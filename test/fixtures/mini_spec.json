@@ -1,0 +1,443 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Test WhatsApp API",
+    "description": "Test spec for parser",
+    "version": "v23.0",
+    "contact": {"name": "Meta", "url": "https://developers.facebook.com"},
+    "license": {"name": "MIT", "url": "https://opensource.org/licenses/MIT"},
+    "termsOfService": "https://developers.facebook.com/terms"
+  },
+  "servers": [
+    {"url": "https://graph.facebook.com", "description": "Production"},
+    {"url": "https://graph.facebook.com/v23.0", "description": "Versioned"}
+  ],
+  "tags": [
+    {"name": "Messages", "description": "## Send Messages\n\nSend various types of messages."},
+    {"name": "Media", "description": "Upload and manage media."},
+    {"name": "Examples", "description": ""}
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
+    },
+    "parameterGroups": {
+      "StandardRequestHeaders": [
+        {"$ref": "#/components/parameters/ContentType"},
+        {"$ref": "#/components/parameters/Authorization"}
+      ],
+      "MinimalRequestHeaders": [
+        {"$ref": "#/components/parameters/Authorization"}
+      ]
+    },
+    "schemas": {
+      "TextMessage": {
+        "type": "object",
+        "description": "A text message payload",
+        "required": ["body"],
+        "properties": {
+          "body": {
+            "type": "string",
+            "description": "The text content",
+            "maxLength": 4096,
+            "minLength": 1,
+            "example": "Hello!"
+          },
+          "preview_url": {
+            "type": "boolean",
+            "default": false,
+            "description": "Enable URL preview"
+          }
+        }
+      },
+      "ImageMessage": {
+        "type": "object",
+        "description": "An image message payload",
+        "properties": {
+          "id": {"type": "string", "description": "Media ID"},
+          "link": {"type": "string", "format": "uri", "description": "Media URL"},
+          "caption": {"type": "string", "maxLength": 1024}
+        }
+      },
+      "Message": {
+        "oneOf": [
+          {"$ref": "#/components/schemas/TextMessage"},
+          {"$ref": "#/components/schemas/ImageMessage"}
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "text": "#/components/schemas/TextMessage",
+            "image": "#/components/schemas/ImageMessage"
+          }
+        }
+      },
+      "MessageStatus": {
+        "type": "string",
+        "enum": ["accepted", "held_for_quality_assessment", "paused"],
+        "description": "Status of a sent message"
+      },
+      "SendMessageResponse": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {"type": "object", "properties": {"id": {"type": "string"}}}
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {"type": "string"},
+              "code": {"type": "integer"},
+              "type": {"type": "string"},
+              "fbtrace_id": {"type": "string"}
+            }
+          }
+        }
+      },
+      "TemplateComponent": {
+        "type": "object",
+        "description": "Base template component",
+        "required": ["type"],
+        "properties": {
+          "type": {"type": "string"}
+        },
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "header": "#/components/schemas/HeaderComponent",
+            "body": "#/components/schemas/BodyComponent"
+          }
+        }
+      },
+      "HeaderComponent": {
+        "allOf": [
+          {"$ref": "#/components/schemas/TemplateComponent"},
+          {
+            "type": "object",
+            "properties": {
+              "format": {"type": "string", "enum": ["TEXT", "IMAGE", "VIDEO", "DOCUMENT"]},
+              "text": {"type": "string", "maxLength": 60}
+            }
+          }
+        ]
+      },
+      "BodyComponent": {
+        "allOf": [
+          {"$ref": "#/components/schemas/TemplateComponent"},
+          {
+            "type": "object",
+            "properties": {
+              "text": {"type": "string", "maxLength": 1024}
+            }
+          }
+        ]
+      },
+      "BusinessProfile": {
+        "type": "object",
+        "properties": {
+          "about": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 139,
+            "description": "Business profile about text"
+          },
+          "websites": {
+            "type": "array",
+            "items": {"type": "string", "format": "uri"},
+            "maxItems": 2,
+            "description": "Business websites"
+          },
+          "country_code": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$",
+            "description": "ISO country code"
+          },
+          "id": {
+            "type": "string",
+            "format": "int64",
+            "example": "1234567890123456"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IncomingMessageValueSystem": {
+        "type": "object",
+        "description": "System notification event",
+        "not": {"required": ["contacts"]}
+      },
+      "MarketingPayloadType": {
+        "type": "string",
+        "const": "template"
+      }
+    },
+    "parameters": {
+      "PhoneNumberId": {
+        "name": "Phone-Number-ID",
+        "in": "path",
+        "required": true,
+        "schema": {"type": "string"},
+        "description": "The phone number ID"
+      },
+      "ContentType": {
+        "name": "Content-Type",
+        "in": "header",
+        "required": true,
+        "schema": {"type": "string"}
+      },
+      "Authorization": {
+        "name": "Authorization",
+        "in": "header",
+        "required": true,
+        "schema": {"type": "string"}
+      },
+      "Version": {
+        "name": "Version",
+        "in": "path",
+        "required": true,
+        "schema": {"type": "string"},
+        "description": "API version"
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {"$ref": "#/components/schemas/ErrorResponse"}
+          }
+        }
+      }
+    },
+    "headers": {
+      "x-fb-trace-id": {
+        "schema": {"type": "string"},
+        "description": "Facebook trace identifier"
+      },
+      "x-fb-request-id": {
+        "schema": {"type": "string", "example": "abc123"},
+        "description": "Unique request ID"
+      },
+      "Access-Control-Allow-Origin": {
+        "schema": {"type": "string", "example": "*"},
+        "description": "CORS policy"
+      }
+    }
+  },
+  "paths": {
+    "/{Version}/{Phone-Number-ID}/messages": {
+      "parameters": [
+        {"$ref": "#/components/parameters/PhoneNumberId"},
+        {"$ref": "#/components/parameters/Version"}
+      ],
+      "post": {
+        "operationId": "sendMessage",
+        "summary": "Send Message.",
+        "description": "Send a message to a WhatsApp user.",
+        "tags": ["Messages"],
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/TextMessage"},
+              "examples": {
+                "text_message": {
+                  "summary": "Send Text Message",
+                  "value": {
+                    "messaging_product": "whatsapp",
+                    "to": "48XXXXXXXXX",
+                    "type": "text",
+                    "text": {"body": "Hello!"}
+                  }
+                },
+                "image_message": {
+                  "summary": "Send Image Message",
+                  "value": {
+                    "messaging_product": "whatsapp",
+                    "to": "48XXXXXXXXX",
+                    "type": "image",
+                    "image": {"link": "https://example.com/img.jpg"}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message sent",
+            "headers": {
+              "x-fb-trace-id": {"$ref": "#/components/headers/x-fb-trace-id"},
+              "x-fb-request-id": {"$ref": "#/components/headers/x-fb-request-id"}
+            },
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/SendMessageResponse"},
+                "examples": {
+                  "success": {
+                    "summary": "Success",
+                    "value": {"messages": [{"id": "wamid.123"}]}
+                  }
+                }
+              }
+            }
+          },
+          "400": {"$ref": "#/components/responses/BadRequest"}
+        }
+      }
+    },
+    "/{Version}/{Phone-Number-ID}/media": {
+      "parameters": [
+        {"$ref": "#/components/parameters/PhoneNumberId"},
+        {"$ref": "#/components/parameters/Version"}
+      ],
+      "post": {
+        "operationId": "uploadMedia",
+        "summary": "Upload Media",
+        "description": "Upload media to WhatsApp servers.",
+        "tags": ["Media"],
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {"type": "string", "format": "binary"},
+                  "messaging_product": {"type": "string"},
+                  "type": {"type": "string"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Media uploaded",
+            "headers": {
+              "x-fb-trace-id": {"$ref": "#/components/headers/x-fb-trace-id"}
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{Version}/{media_id}": {
+      "parameters": [
+        {"$ref": "#/components/parameters/Version"}
+      ],
+      "get": {
+        "operationId": "getMediaUrl",
+        "summary": "Get Media URL",
+        "description": "Retrieve the URL for a media object.",
+        "tags": ["Media"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "media_id",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "The media ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Media URL",
+            "headers": {
+              "x-fb-trace-id": {"$ref": "#/components/headers/x-fb-trace-id"},
+              "Access-Control-Allow-Origin": {"$ref": "#/components/headers/Access-Control-Allow-Origin"}
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {"type": "string", "format": "uri"},
+                    "mime_type": {"type": "string"},
+                    "sha256": {"type": "string"},
+                    "file_size": {"type": "integer"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteMedia",
+        "summary": "Delete Media",
+        "tags": ["Media"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "media_id",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Media deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {"success": {"type": "boolean"}}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{Version}/{Phone-Number-ID}/groups": {
+      "parameters": [
+        {"$ref": "#/components/parameters/PhoneNumberId"},
+        {"$ref": "#/components/parameters/Version"}
+      ],
+      "get": {
+        "operationId": "getActiveGroups",
+        "summary": "Get Active Groups",
+        "description": "Retrieve active groups.",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Groups list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {"type": "object"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [{"bearerAuth": []}]
+}
