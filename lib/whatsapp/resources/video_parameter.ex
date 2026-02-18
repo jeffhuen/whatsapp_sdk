@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.VideoParameter do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `type` | `term()` |  |
+  | `video` | `map()` | A media object. Either `id` or `link` is required. |
+
   ## `type` Values
   | Value |
   | --- |

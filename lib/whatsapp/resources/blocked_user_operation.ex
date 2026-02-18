@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.BlockedUserOperation do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `input` | `String.t()` |  |
+  | `wa_id` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           input: String.t() | nil,

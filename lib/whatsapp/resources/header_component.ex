@@ -1,5 +1,13 @@
 defmodule WhatsApp.Resources.HeaderComponent do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `index` | `String.t()` | Required when `type=button`. Not used for other types. Position index of the button (0-9). |
+  | `parameters` | `list()` | Parameters for the header component, which can be `image`, `video`, `document`, or `text`. [15, 16] |
+  | `sub_type` | `String.t()` | Required when `type=button`. Not used for other types. Type of button to create. |
+  | `type` | `term()` |  |
+
   ## `sub_type` Values
   | Value |
   | --- |

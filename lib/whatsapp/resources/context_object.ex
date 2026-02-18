@@ -1,6 +1,13 @@
 defmodule WhatsApp.Resources.ContextObject do
   @moduledoc """
   Only included if message via a "Message business" button.
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `from` | `String.t()` | Business display phone number. |
+  | `id` | `String.t()` | WhatsApp message ID of the message the user used to access the "Message business" button. |
+  | `referred_product` | `map()` |  |
   """
 
   @type t :: %__MODULE__{

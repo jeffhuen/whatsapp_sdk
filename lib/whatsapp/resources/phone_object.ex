@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.PhoneObject do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `phone` | `String.t()` | Phone number |
+  | `type` | `String.t()` | Phone type |
+  | `wa_id` | `String.t()` | WhatsApp ID |
+
   ## `type` Values
   | Value |
   | --- |

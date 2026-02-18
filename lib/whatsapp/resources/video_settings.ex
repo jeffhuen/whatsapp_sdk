@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.VideoSettings do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `status` | `String.t()` | Enable or disable video calling |
+
   ## `status` Values
   | Value |
   | --- |

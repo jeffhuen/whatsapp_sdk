@@ -1,5 +1,16 @@
 defmodule WhatsApp.Resources.ContactObject do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `addresses` | `list()` | Full contact address(es) |
+  | `birthday` | `Date.t()` | Date of birth (YYYY-MM-DD format) |
+  | `emails` | `list()` | Contact email address(es) |
+  | `name` | `map()` |  |
+  | `org` | `map()` |  |
+  | `phones` | `list()` | Contact phone number(s) |
+  | `urls` | `list()` | Contact URL(s) |
+  """
 
   @type t :: %__MODULE__{
           addresses: list(WhatsApp.Resources.AddressObject.t()) | nil,

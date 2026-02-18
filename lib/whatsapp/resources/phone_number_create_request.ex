@@ -2,6 +2,15 @@ defmodule WhatsApp.Resources.PhoneNumberCreateRequest do
   @moduledoc """
   Request payload for creating a new phone number registration
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `cc` | `String.t()` | Country code for the phone number |
+  | `migrate_phone_number` | `boolean()` | Whether this is a phone number migration from on-premises |
+  | `phone_number` | `String.t()` | Phone number in E.164 format without the + prefix |
+  | `preverified_id` | `String.t()` | Pre-verified phone number ID for BSP scenarios |
+  | `verified_name` | `String.t()` | Business name to be verified for this phone number |
+
   ## `cc` Constraints
 
   - Pattern: `^[0-9]{1,3}$`

@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.UpdateFlowJson do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `success` | `boolean()` |  |
+  | `validation_errors` | `list()` |  |
+  """
 
   @type t :: %__MODULE__{
           success: boolean() | nil,

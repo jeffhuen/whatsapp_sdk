@@ -2,6 +2,24 @@ defmodule WhatsApp.Resources.WhatsAppBusinessAccountPhoneNumber do
   @moduledoc """
   WhatsApp Business Account phone number details and status information
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `account_mode` | `String.t()` | Account mode indicating sandbox or live environment |
+  | `code_verification_status` | `String.t()` | Two-step verification status for the phone number |
+  | `country_code` | `String.t()` | ISO 3166-1 alpha-2 country code |
+  | `country_dial_code` | `String.t()` | Country dialing code |
+  | `display_phone_number` | `String.t()` | Phone number in international format for display purposes |
+  | `host_platform` | `String.t()` | Platform hosting the WhatsApp Business Account |
+  | `id` | `String.t()` | Unique identifier for the phone number status record |
+  | `is_official_business_account` | `boolean()` | Whether this is an official business account |
+  | `messaging_limit_tier` | `String.t()` | Current messaging limit tier for the phone number |
+  | `quality_rating` | `String.t()` | Quality rating based on message delivery and user feedback |
+  | `status` | `String.t()` | Current status of the phone number in the WhatsApp Business Account |
+  | `unified_cert_status` | `String.t()` | Unified certification status combining business and name verification |
+  | `username` | `String.t()` | WhatsApp username for the business account (if available) |
+  | `verified_name` | `String.t()` | Business name verified for this phone number |
+
   ## `account_mode` Values
   | Value |
   | --- |

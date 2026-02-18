@@ -2,6 +2,16 @@ defmodule WhatsApp.Resources.ConnectedClientBusiness do
   @moduledoc """
   Connected client business information and configuration
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `business_status` | `String.t()` | Current status of the connected client business |
+  | `created_time` | `DateTime.t()` | Timestamp when the business connection was created |
+  | `id` | `String.t()` | Unique identifier for the connected client business |
+  | `name` | `String.t()` | Name of the connected client business |
+  | `updated_time` | `DateTime.t()` | Timestamp when the business connection was last updated |
+  | `verification_status` | `String.t()` | Verification status of the connected client business |
+
   ## `business_status` Values
   | Value |
   | --- |

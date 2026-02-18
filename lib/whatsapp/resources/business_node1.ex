@@ -1,6 +1,12 @@
 defmodule WhatsApp.Resources.BusinessNode1 do
   @moduledoc """
   Business entity information
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `id` | `String.t()` | Unique identifier for the business |
+  | `name` | `String.t()` | Name of the business |
   """
 
   @type t :: %__MODULE__{

@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.CallHoursSettings do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `day_of_week_start` | `String.t()` | Start day of the week |
+  | `status` | `String.t()` | Call hours feature status |
+  | `timezone` | `String.t()` | Timezone for call hours |
+
   ## `status` Values
   | Value |
   | --- |

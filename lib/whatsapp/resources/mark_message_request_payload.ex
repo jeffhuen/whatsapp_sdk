@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.MarkMessageRequestPayload do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `message_id` | `String.t()` |  |
+  | `messaging_product` | `String.t()` |  |
+  | `status` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           message_id: String.t(),

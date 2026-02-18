@@ -2,6 +2,16 @@ defmodule WhatsApp.Resources.WhatsAppBusinessMessageDeliveryStatusOccurrence do
   @moduledoc """
   Message delivery status occurrence with detailed event information
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `application` | `map()` | Meta application that owns the Multi-Partner Solution |
+  | `delivery_status` | `String.t()` | Message delivery status |
+  | `error_description` | `String.t()` | Error description if the delivery encountered an error |
+  | `id` | `String.t()` | Unique identifier for the message delivery status occurrence |
+  | `occurrence_timestamp` | `integer()` | Unix timestamp when the delivery status occurrence happened |
+  | `status_timestamp` | `integer()` | Unix timestamp when the status was recorded |
+
   ## `delivery_status` Values
   | Value |
   | --- |

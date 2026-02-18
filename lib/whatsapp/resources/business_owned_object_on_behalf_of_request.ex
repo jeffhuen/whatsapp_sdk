@@ -2,6 +2,15 @@ defmodule WhatsApp.Resources.BusinessOwnedObjectOnBehalfOfRequest do
   @moduledoc """
   On-behalf request details for business owned objects
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `business_owned_object` | `String.t()` | ID of the business owned object (WhatsApp Business Account) for this request |
+  | `id` | `String.t()` | Unique identifier for the on-behalf request |
+  | `receiving_business` | `map()` | Business entity associated with the user |
+  | `requesting_business` | `map()` | Business entity associated with the user |
+  | `status` | `String.t()` | Current status of the business request |
+
   ## `status` Values
   | Value |
   | --- |

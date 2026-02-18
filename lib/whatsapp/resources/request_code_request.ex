@@ -2,6 +2,12 @@ defmodule WhatsApp.Resources.RequestCodeRequest do
   @moduledoc """
   Request body for requesting a verification code
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `code_method` | `String.t()` | Method for receiving the verification code |
+  | `language` | `String.t()` | Language locale for the verification message |
+
   ## `code_method` Values
   | Value |
   | --- |

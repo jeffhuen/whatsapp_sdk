@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.MessageResponseItem do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `id` | `String.t()` | Message ID |
+  """
 
   @type t :: %__MODULE__{
           id: String.t()

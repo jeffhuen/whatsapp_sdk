@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.StorageConfigurationSettingsRequest do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `storage_configuration` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           storage_configuration: map()

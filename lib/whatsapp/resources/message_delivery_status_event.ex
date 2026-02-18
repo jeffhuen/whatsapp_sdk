@@ -2,6 +2,17 @@ defmodule WhatsApp.Resources.MessageDeliveryStatusEvent do
   @moduledoc """
   Message delivery status event occurrence
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `application` | `map()` | Application information for the event |
+  | `delivery_status` | `String.t()` | Message delivery status |
+  | `error_description` | `String.t()` | Error description if the delivery failed |
+  | `id` | `String.t()` | Unique identifier for the delivery status event |
+  | `timestamp` | `integer()` | Unix timestamp when the delivery status event occurred |
+  | `webhook_update_state` | `String.t()` | State of webhook update delivery |
+  | `webhook_uri` | `String.t()` | Webhook URI where the event was delivered |
+
   ## `delivery_status` Values
   | Value |
   | --- |

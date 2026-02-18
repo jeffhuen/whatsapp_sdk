@@ -95,6 +95,7 @@ defmodule WhatsApp.MixProject do
       extras: [
         "README.md",
         "CHANGELOG.md",
+        "LICENSE",
         "guides/getting-started.md",
         "guides/webhooks.md",
         "guides/interactive-messages.md",

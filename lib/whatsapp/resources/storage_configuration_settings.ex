@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.StorageConfigurationSettings do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `enabled` | `boolean()` | Enable or disable custom storage configuration |
+  | `region` | `String.t()` | Data storage region |
+  """
 
   @type t :: %__MODULE__{
           enabled: boolean(),

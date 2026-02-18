@@ -2,6 +2,12 @@ defmodule WhatsApp.Resources.BotCommand do
   @moduledoc """
   Bot command configuration for automated responses
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `command_description` | `String.t()` | Description of what the command does |
+  | `command_name` | `String.t()` | Name of the bot command (without leading slash) |
+
   ## `command_description` Constraints
 
   - Maximum length: 256

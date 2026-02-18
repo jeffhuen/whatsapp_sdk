@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.TextMessage1 do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `body` | `String.t()` | Text content of the message |
+  | `preview_url` | `boolean()` | Whether to show URL preview |
+
   ## `body` Constraints
 
   - Maximum length: 4096

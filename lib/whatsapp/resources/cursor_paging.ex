@@ -1,6 +1,13 @@
 defmodule WhatsApp.Resources.CursorPaging do
   @moduledoc """
   Cursor-based pagination information
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `cursors` | `map()` |  |
+  | `next` | `String.t()` | URL for the next page of results |
+  | `previous` | `String.t()` | URL for the previous page of results |
   """
 
   @type t :: %__MODULE__{

@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.UploadImageRequest do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `file` | `String.t()` |  |
+  | `messaging_product` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           file: String.t() | nil,

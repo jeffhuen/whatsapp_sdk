@@ -1,5 +1,16 @@
 defmodule WhatsApp.Resources.CreateGroupRequest do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `description` | `String.t()` | Group description. Maximum 2048 characters. |
+  | `join_approval_mode` | `String.t()` | Indicates if WhatsApp users who click the invitation link can join the group with or without being approved first.
+  - approval_required: WhatsApp users must be approved via join request before they can access the group
+  - auto_approve: WhatsApp users can join the group without approval
+   |
+  | `messaging_product` | `String.t()` | Messaging product |
+  | `subject` | `String.t()` | Group subject. Maximum 128 characters. Whitespace is trimmed. |
+
   ## `join_approval_mode` Values
   | Value |
   | --- |

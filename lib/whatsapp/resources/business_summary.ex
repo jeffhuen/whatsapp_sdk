@@ -2,6 +2,13 @@ defmodule WhatsApp.Resources.BusinessSummary do
   @moduledoc """
   Summary information about a business entity
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `id` | `String.t()` | Unique identifier for the business |
+  | `name` | `String.t()` | Name of the business |
+  | `verification_status` | `String.t()` | Business verification status |
+
   ## `verification_status` Values
   | Value |
   | --- |

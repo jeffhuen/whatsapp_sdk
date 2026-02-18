@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.CreateGroupInviteLinkRequest do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `messaging_product` | `String.t()` |  |
+
   ## `messaging_product` Values
   | Value |
   | --- |

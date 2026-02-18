@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.GetCreditLines do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `data` | `list()` |  |
+  """
 
   @type t :: %__MODULE__{
           data: list(map()) | nil

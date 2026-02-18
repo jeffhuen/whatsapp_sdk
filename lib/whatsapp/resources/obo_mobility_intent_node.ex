@@ -2,6 +2,16 @@ defmodule WhatsApp.Resources.OBOMobilityIntentNode do
   @moduledoc """
   WhatsApp Business Account OBO Mobility Intent Node
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `created_time` | `DateTime.t()` | Timestamp when the OBO mobility intent was created (ISO 8601 format) |
+  | `id` | `String.t()` | Unique identifier for the OBO Mobility Intent Node |
+  | `solution` | `map()` | Multi-Partner Solution details and configuration |
+  | `status` | `String.t()` | Current status of the OBO mobility intent |
+  | `updated_time` | `DateTime.t()` | Timestamp when the OBO mobility intent was last updated (ISO 8601 format) |
+  | `waba` | `map()` | WhatsApp Business Account details and configuration |
+
   ## `status` Values
   | Value |
   | --- |

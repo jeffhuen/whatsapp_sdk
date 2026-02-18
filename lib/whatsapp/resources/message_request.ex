@@ -2,6 +2,16 @@ defmodule WhatsApp.Resources.MessageRequest do
   @moduledoc """
   Request to send a message via WhatsApp Business API
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `context` | `map()` | Context information for replying to a message |
+  | `messaging_product` | `String.t()` | Messaging service used for the request |
+  | `recipient_type` | `String.t()` | Type of recipient |
+  | `text` | `map()` |  |
+  | `to` | `String.t()` | Recipient's phone number (with country code) or group ID |
+  | `type` | `String.t()` | Type of message being sent |
+
   ## `messaging_product` Values
   | Value |
   | --- |

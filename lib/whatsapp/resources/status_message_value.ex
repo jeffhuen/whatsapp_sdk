@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.StatusMessageValue do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `messaging_product` | `String.t()` | Always 'whatsapp'. |
+  | `metadata` | `map()` |  |
+  | `statuses` | `list()` | Array of status objects. |
+  """
 
   @type t :: %__MODULE__{
           messaging_product: String.t(),

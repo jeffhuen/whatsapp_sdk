@@ -1,6 +1,13 @@
 defmodule WhatsApp.Resources.WhatsAppBusinessApiData1 do
   @moduledoc """
   Application subscription data for WhatsApp Business Account
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `id` | `String.t()` | Unique identifier for the subscribed application |
+  | `link` | `String.t()` | URL link to the application |
+  | `name` | `String.t()` | Name of the subscribed application |
   """
 
   @type t :: %__MODULE__{

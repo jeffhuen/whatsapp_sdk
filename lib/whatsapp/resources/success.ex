@@ -1,6 +1,11 @@
 defmodule WhatsApp.Resources.Success do
   @moduledoc """
   Generic success response
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `success` | `boolean()` | Operation success status |
   """
 
   @type t :: %__MODULE__{

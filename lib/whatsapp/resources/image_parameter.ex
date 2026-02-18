@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.ImageParameter do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `type` | `term()` |  |
+  | `image` | `map()` | A media object. Either `id` or `link` is required. |
+
   ## `type` Values
   | Value |
   | --- |

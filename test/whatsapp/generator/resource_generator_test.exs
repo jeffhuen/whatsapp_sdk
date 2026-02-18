@@ -208,11 +208,12 @@ defmodule WhatsApp.Generator.ResourceGeneratorTest do
       assert content =~ "An image message payload"
     end
 
-    test "SendMessageResponse has no description, gets @moduledoc false", %{
+    test "SendMessageResponse has no description, gets field summary moduledoc", %{
       output_dir: output_dir
     } do
       content = read_resource(output_dir, "send_message.ex")
-      assert content =~ "@moduledoc false"
+      assert content =~ "## Fields"
+      assert content =~ "`messages`"
     end
   end
 

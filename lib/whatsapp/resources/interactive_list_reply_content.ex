@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.InteractiveListReplyContent do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `list_reply` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           list_reply: map()

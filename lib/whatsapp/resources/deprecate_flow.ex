@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.DeprecateFlow do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `success` | `boolean()` |  |
+  """
 
   @type t :: %__MODULE__{
           success: boolean() | nil

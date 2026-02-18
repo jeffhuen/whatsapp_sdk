@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.CallResponsePayload do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `calls` | `list()` |  |
+  | `messaging_product` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           calls: list(map()) | nil,

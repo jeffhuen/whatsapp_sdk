@@ -1,6 +1,13 @@
 defmodule WhatsApp.Resources.Paging2 do
   @moduledoc """
   Pagination information for activity results
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `cursors` | `map()` |  |
+  | `next` | `String.t()` | Graph API endpoint URL for the next page of results |
+  | `previous` | `String.t()` | Graph API endpoint URL for the previous page of results |
   """
 
   @type t :: %__MODULE__{

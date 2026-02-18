@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.RejectSolutionDeactivationRequestRequest do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `reject_deactivation_request` | `boolean()` | Set to true to reject the pending deactivation request |
+  """
 
   @type t :: %__MODULE__{
           reject_deactivation_request: boolean()

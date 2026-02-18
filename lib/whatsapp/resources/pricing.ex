@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.Pricing do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `billable` | `boolean()` |  |
+  | `category` | `String.t()` |  |
+  | `pricing_model` | `String.t()` |  |
+
   ## `pricing_model` Values
   | Value |
   | --- |

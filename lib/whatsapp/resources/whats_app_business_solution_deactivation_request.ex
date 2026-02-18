@@ -2,6 +2,11 @@ defmodule WhatsApp.Resources.WhatsAppBusinessSolutionDeactivationRequest do
   @moduledoc """
   Request payload for sending a Multi-Partner Solution deactivation request
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `reason` | `String.t()` | Optional reason for the deactivation request |
+
   ## `reason` Constraints
 
   - Maximum length: 500

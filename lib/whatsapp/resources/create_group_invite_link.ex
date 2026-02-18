@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.CreateGroupInviteLink do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `invite_link` | `String.t()` | Group invite link |
+  | `messaging_product` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           invite_link: String.t() | nil,

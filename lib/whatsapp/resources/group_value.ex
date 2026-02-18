@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.GroupValue do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `groups` | `list()` | Array of group objects. |
+  | `messaging_product` | `String.t()` | Always 'whatsapp'. |
+  | `metadata` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           groups: list(WhatsApp.Resources.Groups.t()),

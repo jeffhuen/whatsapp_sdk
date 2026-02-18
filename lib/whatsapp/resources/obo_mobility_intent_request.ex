@@ -2,6 +2,16 @@ defmodule WhatsApp.Resources.OBOMobilityIntentRequest do
   @moduledoc """
   Request payload for OBO mobility intent operations
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `intent_type` | `String.t()` | Type of mobility intent operation |
+  | `metadata` | `map()` | Additional metadata for the mobility operation |
+  | `mobility_reason` | `String.t()` | Reason for the mobility intent |
+  | `scheduled_execution_time` | `DateTime.t()` | Scheduled time for mobility execution (ISO 8601 format) |
+  | `solution_id` | `String.t()` | Unique identifier for the WhatsApp Business Solution |
+  | `target_solution_id` | `String.t()` | Target solution ID for mobility operations (required for transfers) |
+
   ## `intent_type` Values
   | Value |
   | --- |

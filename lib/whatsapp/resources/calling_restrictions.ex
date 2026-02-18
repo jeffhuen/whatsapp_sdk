@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.CallingRestrictions do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `restrictions` | `list()` |  |
+  """
 
   @type t :: %__MODULE__{
           restrictions: list(map()) | nil

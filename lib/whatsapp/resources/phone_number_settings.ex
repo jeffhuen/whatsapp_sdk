@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.PhoneNumberSettings do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `calling` | `map()` |  |
+  | `payload_encryption` | `map()` |  |
+  | `storage_configuration` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           calling: map(),

@@ -161,18 +161,44 @@ defmodule WhatsApp.Generator.ResourceGenerator do
     doc_parts =
       [
         description,
+        build_field_summary(properties),
         build_enum_docs(properties),
         build_constraint_docs(properties)
       ]
       |> Enum.reject(&is_nil/1)
 
-    if doc_parts == [] do
-      ~s(  @moduledoc false)
-    else
-      content = Enum.join(doc_parts, "\n\n")
-      ~s(  @moduledoc """\n#{indent(content, 2)}\n  """)
-    end
+    content = Enum.join(doc_parts, "\n\n")
+    ~s(  @moduledoc """\n#{indent(content, 2)}\n  """)
   end
+
+  defp build_field_summary([]), do: nil
+
+  defp build_field_summary(properties) do
+    header = "## Fields\n"
+    rows = Enum.map_join(properties, "\n", &format_field_row/1)
+    header <> "| Field | Type | Description |\n| --- | --- | --- |\n" <> rows
+  end
+
+  defp format_field_row(prop) do
+    field = prop_field_name(prop.name)
+    type = field_type_label(prop)
+    desc = Map.get(prop, :description, "") || ""
+    "| `#{field}` | `#{type}` | #{desc} |"
+  end
+
+  defp field_type_label(prop), do: do_field_type_label(prop.type, Map.get(prop, :format))
+
+  defp do_field_type_label(:string, :date_time), do: "DateTime.t()"
+  defp do_field_type_label(:string, :date), do: "Date.t()"
+  defp do_field_type_label(:string, :time), do: "Time.t()"
+  defp do_field_type_label(:string, _), do: "String.t()"
+  defp do_field_type_label(:integer, _), do: "integer()"
+  defp do_field_type_label(:number, _), do: "float()"
+  defp do_field_type_label(:boolean, _), do: "boolean()"
+  defp do_field_type_label(:object, _), do: "map()"
+  defp do_field_type_label({:array, _}, _), do: "list()"
+  defp do_field_type_label({:ref, ref_name}, _), do: ref_name
+  defp do_field_type_label(_, _), do: "term()"
 
   defp build_enum_docs(properties) do
     enum_props = Enum.filter(properties, &Map.has_key?(&1, :enum))

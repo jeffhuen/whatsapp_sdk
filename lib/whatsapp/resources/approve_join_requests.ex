@@ -1,5 +1,13 @@
 defmodule WhatsApp.Resources.ApproveJoinRequests do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `approved_join_requests` | `list()` |  |
+  | `errors` | `list()` |  |
+  | `failed_join_requests` | `list()` |  |
+  | `messaging_product` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           approved_join_requests: list(String.t()) | nil,

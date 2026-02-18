@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.RegisterRequest do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `messaging_product` | `String.t()` | Messaging service used for the request |
+  | `pin` | `String.t()` | 6-digit PIN for two-step verification |
+
   ## `messaging_product` Values
   | Value |
   | --- |

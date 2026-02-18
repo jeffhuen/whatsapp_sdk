@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.UserIdentityChangeSettings do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `enabled` | `boolean()` | Enable or disable user identity change notifications |
+  """
 
   @type t :: %__MODULE__{
           enabled: boolean()

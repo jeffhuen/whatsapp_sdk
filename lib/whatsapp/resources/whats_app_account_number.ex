@@ -2,6 +2,23 @@ defmodule WhatsApp.Resources.WhatsAppAccountNumber do
   @moduledoc """
   WhatsApp Account Number details and configuration
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `account_mode` | `String.t()` | Account mode indicating sandbox or live environment |
+  | `certificate` | `String.t()` | Business certificate information for the account number |
+  | `code_verification_status` | `String.t()` | Two-step verification status for the phone number |
+  | `country_code` | `String.t()` | ISO 3166-1 alpha-2 country code |
+  | `country_dial_code` | `String.t()` | Country dialing code |
+  | `display_phone_number` | `String.t()` | Phone number in international format for display purposes |
+  | `id` | `String.t()` | Unique identifier for the WhatsApp Account Number |
+  | `is_official_business_account` | `boolean()` | Whether this is an official business account |
+  | `messaging_limit_tier` | `String.t()` | Current messaging limit tier for the account number |
+  | `name_status` | `String.t()` | Status of the display name associated with the phone number |
+  | `quality_rating` | `String.t()` | Quality rating based on message delivery and user feedback |
+  | `status` | `String.t()` | Current status of the WhatsApp Account Number |
+  | `verified_name` | `String.t()` | Business name verified for this phone number |
+
   ## `account_mode` Values
   | Value |
   | --- |

@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.UserIdentityChangeSettingsRequest do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `user_identity_change` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           user_identity_change: map()

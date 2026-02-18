@@ -2,6 +2,13 @@ defmodule WhatsApp.Resources.RecurrencePattern do
   @moduledoc """
   Pattern for recurring schedules
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `end_date` | `Date.t()` | End date for the recurrence pattern |
+  | `frequency` | `String.t()` |  |
+  | `interval` | `integer()` | Interval between recurrences |
+
   ## `frequency` Values
   | Value |
   | --- |

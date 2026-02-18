@@ -2,6 +2,13 @@ defmodule WhatsApp.Resources.CustomerCare do
   @moduledoc """
   Contact information for customer care and support
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `email` | `String.t()` | Email address for customer care contact |
+  | `landline_number` | `String.t()` | Landline phone number for customer care (with country code) |
+  | `mobile_number` | `String.t()` | Mobile phone number for customer care (with country code) |
+
   ## `landline_number` Constraints
 
   - Pattern: `^\\+[1-9]\\d{1,14}$`

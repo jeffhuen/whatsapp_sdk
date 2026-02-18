@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.IncomingMessageValueSystem do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `messages` | `list()` | Array containing only 'system' message objects. |
+  | `messaging_product` | `String.t()` | Always 'whatsapp'. |
+  | `metadata` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           messages: list(WhatsApp.Resources.SystemMessage.t()),

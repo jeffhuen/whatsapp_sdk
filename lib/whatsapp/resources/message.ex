@@ -2,6 +2,13 @@ defmodule WhatsApp.Resources.Message do
   @moduledoc """
   Response from sending a message
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `contacts` | `list()` | Contact information |
+  | `messages` | `list()` | Message information |
+  | `messaging_product` | `String.t()` | Messaging service |
+
   ## `messaging_product` Values
   | Value |
   | --- |

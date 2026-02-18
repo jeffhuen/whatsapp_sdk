@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.Entry do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `changes` | `list()` |  |
+  | `id` | `String.t()` | WhatsApp Business Account ID. |
+  """
 
   @type t :: %__MODULE__{
           changes: list(WhatsApp.Resources.Change.t()),

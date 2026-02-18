@@ -2,6 +2,12 @@ defmodule WhatsApp.Resources.UpdateQrCodeRequest do
   @moduledoc """
   Request payload for updating an existing message QR code
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `code` | `String.t()` | 14-character QR code identifier to update |
+  | `prefilled_message` | `String.t()` | New pre-filled message text (max 140 characters) |
+
   ## `code` Constraints
 
   - Minimum length: 14

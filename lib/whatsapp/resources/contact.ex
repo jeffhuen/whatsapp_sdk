@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.Contact do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `input` | `String.t()` | Input phone number |
+  | `wa_id` | `String.t()` | WhatsApp ID |
+  """
 
   @type t :: %__MODULE__{
           input: String.t(),

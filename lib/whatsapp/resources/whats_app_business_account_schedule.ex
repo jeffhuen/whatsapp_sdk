@@ -2,6 +2,23 @@ defmodule WhatsApp.Resources.WhatsAppBusinessAccountSchedule do
   @moduledoc """
   WhatsApp Business Account schedule configuration and details
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `created_time` | `DateTime.t()` | ISO 8601 timestamp when the schedule was created |
+  | `days_of_week` | `list()` | Days of the week when the schedule is active |
+  | `description` | `String.t()` | Optional description of the schedule purpose |
+  | `end_time` | `Time.t()` | Schedule end time in HH:MM format |
+  | `id` | `String.t()` | Unique identifier for the schedule |
+  | `is_active` | `boolean()` | Whether the schedule is currently active |
+  | `name` | `String.t()` | Human-readable name for the schedule |
+  | `recurrence_pattern` | `map()` | Pattern for recurring schedules |
+  | `schedule_type` | `String.t()` | Type of schedule configuration |
+  | `start_time` | `Time.t()` | Schedule start time in HH:MM format |
+  | `status` | `String.t()` | Current status of the schedule |
+  | `timezone` | `String.t()` | Timezone identifier for the schedule |
+  | `updated_time` | `DateTime.t()` | ISO 8601 timestamp when the schedule was last updated |
+
   ## `schedule_type` Values
   | Value |
   | --- |

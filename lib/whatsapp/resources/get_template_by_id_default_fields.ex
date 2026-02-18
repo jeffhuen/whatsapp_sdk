@@ -1,5 +1,15 @@
 defmodule WhatsApp.Resources.GetTemplateByIdDefaultFields do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `category` | `String.t()` |  |
+  | `components` | `list()` |  |
+  | `id` | `String.t()` |  |
+  | `language` | `String.t()` |  |
+  | `name` | `String.t()` |  |
+  | `status` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           category: String.t() | nil,

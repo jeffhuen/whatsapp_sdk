@@ -2,6 +2,14 @@ defmodule WhatsApp.Resources.WhatsAppBusinessSolution3 do
   @moduledoc """
   WhatsApp Business Solution information
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `id` | `String.t()` | Solution ID |
+  | `name` | `String.t()` | Solution name |
+  | `partner_id` | `String.t()` | Partner ID associated with the solution |
+  | `status` | `String.t()` | Current status of the solution |
+
   ## `status` Values
   | Value |
   | --- |

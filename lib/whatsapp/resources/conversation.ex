@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.Conversation do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `expiration_timestamp` | `String.t()` |  |
+  | `id` | `String.t()` |  |
+  | `origin` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           expiration_timestamp: String.t() | nil,

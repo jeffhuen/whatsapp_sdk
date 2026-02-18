@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.GetActiveGroups do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `data` | `map()` |  |
+  | `paging` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           data: map() | nil,

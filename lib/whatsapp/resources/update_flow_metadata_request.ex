@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.UpdateFlowMetadataRequest do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `categories` | `String.t()` |  |
+  | `endpoint_uri` | `String.t()` |  |
+  | `name` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           categories: String.t() | nil,

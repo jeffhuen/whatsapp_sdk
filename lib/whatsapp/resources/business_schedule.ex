@@ -2,6 +2,13 @@ defmodule WhatsApp.Resources.BusinessSchedule do
   @moduledoc """
   Business hours schedule information
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `close_time` | `String.t()` | Closing time in HH:MM format |
+  | `day_of_week` | `String.t()` |  |
+  | `open_time` | `String.t()` | Opening time in HH:MM format |
+
   ## `day_of_week` Values
   | Value |
   | --- |

@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.InteractiveButtonReplyContent do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `button_reply` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           button_reply: map()

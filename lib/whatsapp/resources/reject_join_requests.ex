@@ -1,5 +1,13 @@
 defmodule WhatsApp.Resources.RejectJoinRequests do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `errors` | `list()` |  |
+  | `failed_join_requests` | `list()` |  |
+  | `messaging_product` | `String.t()` |  |
+  | `rejected_join_requests` | `list()` |  |
+  """
 
   @type t :: %__MODULE__{
           errors: list(WhatsApp.Resources.Error.t()) | nil,

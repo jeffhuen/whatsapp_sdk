@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.CallTerminateRequestPayload do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `action` | `String.t()` | Action to terminate the call |
+  | `call_id` | `String.t()` | The WhatsApp call ID |
+  | `messaging_product` | `String.t()` | Messaging product |
+
   ## `action` Values
   | Value |
   | --- |

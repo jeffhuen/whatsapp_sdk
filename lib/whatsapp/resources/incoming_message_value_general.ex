@@ -1,5 +1,13 @@
 defmodule WhatsApp.Resources.IncomingMessageValueGeneral do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `contacts` | `list()` | Array of contact profiles for the sender. Included for all non-system incoming messages. |
+  | `messages` | `list()` | Array of message objects. The structure varies based on the 'type' property. |
+  | `messaging_product` | `String.t()` | Always 'whatsapp'. |
+  | `metadata` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           contacts: list(WhatsApp.Resources.ContactProfile.t()),

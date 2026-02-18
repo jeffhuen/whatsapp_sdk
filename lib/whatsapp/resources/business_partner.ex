@@ -2,6 +2,18 @@ defmodule WhatsApp.Resources.BusinessPartner do
   @moduledoc """
   Business entity that has partner access to the pre-verified phone number
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `created_time` | `DateTime.t()` | ISO 8601 timestamp when the business was created |
+  | `id` | `String.t()` | Unique identifier for the partner business |
+  | `name` | `String.t()` | Name of the partner business |
+  | `primary_page` | `String.t()` | Primary Facebook Page ID associated with the business |
+  | `timezone_id` | `integer()` | Timezone identifier for the business location |
+  | `two_factor_type` | `String.t()` | Two-factor authentication method configured for the business |
+  | `updated_time` | `DateTime.t()` | ISO 8601 timestamp when the business was last updated |
+  | `verification_status` | `String.t()` | Business verification status |
+
   ## `two_factor_type` Values
   | Value |
   | --- |

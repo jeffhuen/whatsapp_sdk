@@ -1,5 +1,18 @@
 defmodule WhatsApp.Resources.Groups do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `added_participants` | `list()` | List of participants added to the group |
+  | `description` | `String.t()` | Group description |
+  | `group_id` | `String.t()` | Unique identifier for the group |
+  | `profile_picture` | `map()` |  |
+  | `removed_participants` | `list()` | List of participants removed from the group |
+  | `request_id` | `String.t()` | Unique identifier for the request |
+  | `subject` | `String.t()` | Group subject/name |
+  | `timestamp` | `integer()` | Unix timestamp of the group event |
+  | `type` | `String.t()` | Type of group event |
+
   ## `type` Values
   | Value |
   | --- |

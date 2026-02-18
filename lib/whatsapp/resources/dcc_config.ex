@@ -1,6 +1,12 @@
 defmodule WhatsApp.Resources.DCCConfig do
   @moduledoc """
   Data and Content Control configuration
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `enabled` | `boolean()` | Whether DCC is enabled |
+  | `policy_url` | `String.t()` | URL to the DCC policy |
   """
 
   @type t :: %__MODULE__{

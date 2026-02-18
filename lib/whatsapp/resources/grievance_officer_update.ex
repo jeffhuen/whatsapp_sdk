@@ -2,6 +2,14 @@ defmodule WhatsApp.Resources.GrievanceOfficerUpdate do
   @moduledoc """
   Contact information for the designated grievance officer
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `email` | `String.t()` | Email address for grievance officer contact |
+  | `landline_number` | `String.t()` | Landline phone number for grievance officer (with country code) |
+  | `mobile_number` | `String.t()` | Mobile phone number for grievance officer (with country code) |
+  | `name` | `String.t()` | Full name of the grievance officer |
+
   ## `email` Constraints
 
   - Maximum length: 128

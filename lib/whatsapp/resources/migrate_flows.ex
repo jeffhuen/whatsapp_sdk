@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.MigrateFlows do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `failed_flows` | `list()` |  |
+  | `migrated_flows` | `list()` |  |
+  """
 
   @type t :: %__MODULE__{
           failed_flows: list(map()) | nil,

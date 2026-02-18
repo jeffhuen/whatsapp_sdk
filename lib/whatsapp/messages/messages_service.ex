@@ -220,7 +220,7 @@ defmodule WhatsApp.Messages.MessagesService do
   ### Send Audio Message by URL
 
       %{
-    "audio" => %{"link" => "<http(s)://audio-url>"},
+    "audio" => %{"link" => "http(s)://audio-url"},
     "messaging_product" => "whatsapp",
     "recipient_type" => "individual",
     "to" => "{{Recipient-Phone-Number}}",
@@ -326,7 +326,7 @@ defmodule WhatsApp.Messages.MessagesService do
       %{
     "document" => %{
       "caption" => "<DOCUMENT-CAPTION-TEXT>",
-      "link" => "<http(s)://document-url>"
+      "link" => "http(s)://document-url"
     },
     "messaging_product" => "whatsapp",
     "recipient_type" => "individual",
@@ -382,7 +382,7 @@ defmodule WhatsApp.Messages.MessagesService do
     "context" => %{"message_id" => "<MSGID_OF_MSG_YOU_ARE_REPLYING_TO>"},
     "messaging_product" => "whatsapp",
     "recipient_type" => "individual",
-    "sticker" => %{"link" => "<http(s)://sticker-url>"},
+    "sticker" => %{"link" => "http(s)://sticker-url"},
     "to" => "{{Recipient-Phone-Number}}",
     "type" => "sticker"
   }
@@ -716,7 +716,7 @@ defmodule WhatsApp.Messages.MessagesService do
     "type" => "video",
     "video" => %{
       "caption" => "<VIDEO_CAPTION_TEXT>",
-      "link" => "<http(s)://video-url>"
+      "link" => "http(s)://video-url"
     }
   }
 
@@ -835,7 +835,7 @@ defmodule WhatsApp.Messages.MessagesService do
     "context" => %{"message_id" => "<MSGID_OF_MSG_YOU_ARE_REPLYING_TO>"},
     "document" => %{
       "caption" => "<DOCUMENT_CAPTION_TEXT>",
-      "link" => "<http(s)://document-url>"
+      "link" => "http(s)://document-url"
     },
     "messaging_product" => "whatsapp",
     "recipient_type" => "individual",
@@ -1030,7 +1030,7 @@ defmodule WhatsApp.Messages.MessagesService do
     "type" => "video",
     "video" => %{
       "caption" => "<VIDEO_CAPTION_TEXT>",
-      "link" => "<http(s)://video-url>"
+      "link" => "http(s)://video-url"
     }
   }
 
@@ -1106,7 +1106,7 @@ defmodule WhatsApp.Messages.MessagesService do
       %{
     "messaging_product" => "whatsapp",
     "recipient_type" => "individual",
-    "sticker" => %{"link" => "<http(s)://sticker-url>"},
+    "sticker" => %{"link" => "http(s)://sticker-url"},
     "to" => "{{Recipient-Phone-Number}}",
     "type" => "sticker"
   }

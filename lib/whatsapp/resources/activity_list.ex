@@ -1,6 +1,12 @@
 defmodule WhatsApp.Resources.ActivityList do
   @moduledoc """
   Paginated list of WhatsApp Business Account activities
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `data` | `list()` | Array of activity records |
+  | `paging` | `map()` |  |
   """
 
   @type t :: %__MODULE__{

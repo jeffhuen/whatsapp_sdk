@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.MarketingMessageResponsePayload do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `contacts` | `list()` |  |
+  | `messages` | `list()` |  |
+  | `messaging_product` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           contacts: list(map()) | nil,

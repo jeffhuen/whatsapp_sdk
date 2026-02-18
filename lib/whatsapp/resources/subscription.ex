@@ -1,6 +1,12 @@
 defmodule WhatsApp.Resources.Subscription do
   @moduledoc """
   Response after successful subscription operation
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `data` | `list()` | Array containing subscription details |
+  | `success` | `boolean()` | Indicates whether the subscription operation was successful |
   """
 
   @type t :: %__MODULE__{

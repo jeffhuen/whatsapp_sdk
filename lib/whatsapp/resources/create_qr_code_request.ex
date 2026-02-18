@@ -2,6 +2,12 @@ defmodule WhatsApp.Resources.CreateQrCodeRequest do
   @moduledoc """
   Request payload for creating a new message QR code
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `generate_qr_image` | `String.t()` | QR image format. When specified, response includes qr_image_url |
+  | `prefilled_message` | `String.t()` | Pre-filled message text (max 140 characters) that appears in customer chat |
+
   ## `generate_qr_image` Values
   | Value |
   | --- |

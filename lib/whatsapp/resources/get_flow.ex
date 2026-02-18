@@ -1,5 +1,22 @@
 defmodule WhatsApp.Resources.GetFlow do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `application` | `map()` |  |
+  | `categories` | `list()` |  |
+  | `data_api_version` | `String.t()` |  |
+  | `data_channel_uri` | `String.t()` |  |
+  | `health_status` | `map()` |  |
+  | `id` | `String.t()` |  |
+  | `json_version` | `String.t()` |  |
+  | `metric` | `map()` |  |
+  | `name` | `String.t()` |  |
+  | `preview` | `map()` |  |
+  | `status` | `String.t()` |  |
+  | `validation_errors` | `list()` |  |
+  | `whatsapp_business_account` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           application: map() | nil,

@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.UpdateFlowJsonRequest do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `asset_type` | `String.t()` |  |
+  | `file` | `String.t()` |  |
+  | `name` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           asset_type: String.t() | nil,

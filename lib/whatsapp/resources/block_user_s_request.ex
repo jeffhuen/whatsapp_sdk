@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.BlockUserSRequest do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `block_users` | `list()` |  |
+  | `messaging_product` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           block_users: list(map()) | nil,

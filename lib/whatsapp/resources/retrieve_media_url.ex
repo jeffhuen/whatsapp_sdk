@@ -1,5 +1,15 @@
 defmodule WhatsApp.Resources.RetrieveMediaUrl do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `file_size` | `String.t()` |  |
+  | `id` | `String.t()` |  |
+  | `messaging_product` | `String.t()` |  |
+  | `mime_type` | `String.t()` |  |
+  | `sha256` | `String.t()` |  |
+  | `url` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           file_size: String.t() | nil,

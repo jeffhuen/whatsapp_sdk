@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.PaginationCursors do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `after` | `String.t()` |  |
+  | `before` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           after: String.t() | nil,

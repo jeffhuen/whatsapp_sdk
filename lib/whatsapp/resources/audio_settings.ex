@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.AudioSettings do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `status` | `String.t()` | Audio calling status |
+
   ## `status` Values
   | Value |
   | --- |

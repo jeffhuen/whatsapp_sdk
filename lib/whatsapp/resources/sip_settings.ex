@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.SipSettings do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `status` | `String.t()` | Enable or disable SIP calling |
+
   ## `status` Values
   | Value |
   | --- |

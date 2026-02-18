@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.VerifyCodeRequest do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `code` | `String.t()` | 6-digit verification code received via SMS or voice |
+
   ## `code` Constraints
 
   - Pattern: `^[0-9]{6}$`

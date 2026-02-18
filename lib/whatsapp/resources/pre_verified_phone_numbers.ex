@@ -1,6 +1,12 @@
 defmodule WhatsApp.Resources.PreVerifiedPhoneNumbers do
   @moduledoc """
   Response containing list of pre-verified phone numbers
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `data` | `list()` | List of pre-verified phone numbers |
+  | `paging` | `map()` | Cursor-based pagination information |
   """
 
   @type t :: %__MODULE__{

@@ -2,6 +2,16 @@ defmodule WhatsApp.Resources.OfficialBusinessAccountUpdateRequest do
   @moduledoc """
   Request payload for updating Official Business Account status
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `additional_supporting_information` | `String.t()` | Additional information to support the Official Business Account application |
+  | `business_website_url` | `String.t()` | Official business website URL |
+  | `parent_business_or_brand` | `String.t()` | Parent business or brand name |
+  | `primary_country_of_operation` | `String.t()` | Primary country where the business operates |
+  | `primary_language` | `String.t()` | Primary language used by the business |
+  | `supporting_links` | `list()` | Supporting links that demonstrate business notability (minimum 5, maximum 10) |
+
   ## `additional_supporting_information` Constraints
 
   - Maximum length: 1000

@@ -2,6 +2,19 @@ defmodule WhatsApp.Resources.WhatsAppBusinessAccount3 do
   @moduledoc """
   WhatsApp Business Account details and configuration
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `account_review_status` | `String.t()` | Review status of the WhatsApp Business Account |
+  | `business_verification_status` | `String.t()` | Business verification status of the WhatsApp Business Account |
+  | `country` | `String.t()` | Country code for the WhatsApp Business Account |
+  | `id` | `String.t()` | Unique identifier for the WhatsApp Business Account |
+  | `message_template_namespace` | `String.t()` | Message template namespace for the WhatsApp Business Account |
+  | `name` | `String.t()` | Human-readable name of the WhatsApp Business Account |
+  | `ownership_type` | `String.t()` | Ownership type of the WhatsApp Business Account |
+  | `primary_business_location` | `String.t()` | Primary business location for the WhatsApp Business Account |
+  | `timezone_id` | `String.t()` | Timezone identifier for the WhatsApp Business Account |
+
   ## `account_review_status` Values
   | Value |
   | --- |

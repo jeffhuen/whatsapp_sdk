@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.CurrencyParameter do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `type` | `term()` |  |
+  | `currency` | `map()` |  |
+
   ## `type` Values
   | Value |
   | --- |

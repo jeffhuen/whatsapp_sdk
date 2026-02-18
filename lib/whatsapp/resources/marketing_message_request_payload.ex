@@ -1,5 +1,16 @@
 defmodule WhatsApp.Resources.MarketingMessageRequestPayload do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `message_activity_sharing` | `boolean()` | Optional flag to control message activity sharing |
+  | `messaging_product` | `String.t()` | Messaging service used. Must be "whatsapp" |
+  | `product_policy` | `String.t()` | Optional product policy setting |
+  | `recipient_type` | `String.t()` | Type of recipient. Must be "individual" |
+  | `template` | `map()` |  |
+  | `to` | `String.t()` | WhatsApp ID or phone number of the message recipient |
+  | `type` | `String.t()` | Type of message. Must be "template" for marketing messages |
+
   ## `messaging_product` Values
   | Value |
   | --- |

@@ -2,6 +2,22 @@ defmodule WhatsApp.Resources.WhatsAppBusinessSolutionCreateRequest do
   @moduledoc """
   Request payload for creating a Multi-Partner Solution
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `owner_permissions` | `list()` | Configurable permissions granted to the solution owner app. Currently supports
+  only MESSAGING permission. Use empty array if owner should not have configurable permissions.
+   |
+  | `partner_app_id` | `String.t()` | Facebook Application ID of the partner app that will participate in this solution.
+  Must be a valid application ID accessible to the requesting entity.
+   |
+  | `partner_permissions` | `list()` | Configurable permissions granted to the partner app. Currently supports
+  only MESSAGING permission. Use empty array if partner should not have configurable permissions.
+   |
+  | `solution_name` | `String.t()` | Human-readable name for the Multi-Partner Solution. Used for identification
+  and management purposes in partner dashboards and solution management interfaces.
+   |
+
   ## `owner_permissions` Constraints
 
   - Maximum items: 1

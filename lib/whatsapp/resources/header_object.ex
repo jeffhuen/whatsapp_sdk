@@ -2,6 +2,16 @@ defmodule WhatsApp.Resources.HeaderObject do
   @moduledoc """
   Header content displayed on top of a message. Required for 'product_list' type. Cannot be set for 'product' type.
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `document` | `map()` | A media object. Either `id` or `link` is required. |
+  | `image` | `map()` | A media object. Either `id` or `link` is required. |
+  | `sub_text` | `String.t()` | Optional sub-text for the header. Emojis supported, no markdown. |
+  | `text` | `String.t()` | Text for the header. Required if 'type' is 'text'. Emojis supported, no markdown. |
+  | `type` | `String.t()` | The header type. |
+  | `video` | `map()` | A media object. Either `id` or `link` is required. |
+
   ## `type` Values
   | Value |
   | --- |

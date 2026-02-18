@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.TextParameter do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `type` | `term()` |  |
+  | `text` | `String.t()` | The message's text. |
+
   ## `type` Values
   | Value |
   | --- |

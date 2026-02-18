@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.GetTemplateByNameDefaultFields do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `data` | `list()` |  |
+  | `paging` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           data: list(map()) | nil,

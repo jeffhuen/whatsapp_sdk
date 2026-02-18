@@ -2,6 +2,21 @@ defmodule WhatsApp.Resources.ReferralObject do
   @moduledoc """
   Only included if message via a Click to WhatsApp ad.
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `body` | `String.t()` | Ad primary text. |
+  | `ctwa_clid` | `String.t()` | Ad click ID. |
+  | `headline` | `String.t()` | Ad headline. |
+  | `image_url` | `String.t()` | Only included for image media_type. |
+  | `media_type` | `String.t()` |  |
+  | `source_id` | `String.t()` | Ad ID. |
+  | `source_type` | `String.t()` |  |
+  | `source_url` | `String.t()` | Ad URL. |
+  | `thumbnail_url` | `String.t()` | Only included for video media_type. |
+  | `video_url` | `String.t()` | Only included for video media_type. |
+  | `welcome_message` | `map()` |  |
+
   ## `media_type` Values
   | Value |
   | --- |

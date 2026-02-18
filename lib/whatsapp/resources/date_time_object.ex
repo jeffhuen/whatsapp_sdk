@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.DateTimeObject do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `fallback_value` | `String.t()` | Default text. For Cloud API, this fallback value is always used. |
+  """
 
   @type t :: %__MODULE__{
           fallback_value: String.t()

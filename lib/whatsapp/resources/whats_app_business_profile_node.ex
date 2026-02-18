@@ -2,6 +2,21 @@ defmodule WhatsApp.Resources.WhatsAppBusinessProfileNode do
   @moduledoc """
   WhatsApp Business Profile node details and configuration
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `about` | `String.t()` | About section text for the business profile |
+  | `account_name` | `String.t()` | Name of the business account |
+  | `address` | `String.t()` | Physical address of the business |
+  | `description` | `String.t()` | Business description text |
+  | `email` | `String.t()` | Contact email address of the business |
+  | `id` | `String.t()` | Unique identifier for the WhatsApp Business Profile |
+  | `messaging_product` | `String.t()` | The messaging service used |
+  | `profile_picture_handle` | `String.t()` | Handle of the profile picture for upload operations |
+  | `profile_picture_url` | `String.t()` | URL of the business profile picture |
+  | `vertical` | `String.t()` | The industry type of the business |
+  | `websites` | `list()` | List of website URLs associated with the business |
+
   ## `messaging_product` Values
   | Value |
   | --- |

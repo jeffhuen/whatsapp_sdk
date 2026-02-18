@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.UpdateWhatsAppBusinessAccountRequest do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `name` | `String.t()` | Updated name for the WhatsApp Business Account |
+  | `timezone_id` | `String.t()` | Updated timezone identifier for the WhatsApp Business Account |
+
   ## `name` Constraints
 
   - Minimum length: 1

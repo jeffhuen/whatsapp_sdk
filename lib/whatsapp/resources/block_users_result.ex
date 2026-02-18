@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.BlockUsersResult do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `added_users` | `list()` |  |
+  """
 
   @type t :: %__MODULE__{
           added_users: list(WhatsApp.Resources.BlockedUserOperation.t()) | nil

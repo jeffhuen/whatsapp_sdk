@@ -2,6 +2,18 @@ defmodule WhatsApp.Resources.PhoneNumberStatusUpdateRequest do
   @moduledoc """
   Request to update phone number status and configuration
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `connection_status` | `String.t()` | Connection status between WhatsApp Business Account and phone number |
+  | `new_display_name` | `String.t()` | New display name for name verification request |
+  | `pin` | `String.t()` | Two-step verification PIN (can be empty string) |
+  | `search_visibility` | `String.t()` | Search visibility status for the WhatsApp Business Account |
+  | `username` | `String.t()` | Username for the WhatsApp Business Account |
+  | `webhook_configuration` | `map()` | Webhook configuration settings |
+  | `webhook_url` | `String.t()` | Webhook URL for receiving message notifications |
+  | `whatsapp_business_api_data` | `map()` | WhatsApp Business API configuration data |
+
   ## `connection_status` Values
   | Value |
   | --- |

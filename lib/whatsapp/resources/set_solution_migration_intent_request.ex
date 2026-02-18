@@ -2,6 +2,15 @@ defmodule WhatsApp.Resources.SetSolutionMigrationIntentRequest do
   @moduledoc """
   Request payload for setting solution migration intent
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `migration_intent` | `String.t()` | Intent for solution migration |
+  | `migration_reason` | `String.t()` | Reason for the migration intent |
+  | `scheduled_migration_time` | `DateTime.t()` | Scheduled time for migration execution (ISO 8601 format) |
+  | `solution_id` | `String.t()` | Unique identifier for the Multi-Partner Solution |
+  | `target_solution_id` | `String.t()` | Target solution ID for migration (required for certain migration intents) |
+
   ## `migration_intent` Values
   | Value |
   | --- |

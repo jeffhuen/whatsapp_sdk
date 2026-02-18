@@ -2,6 +2,14 @@ defmodule WhatsApp.Resources.WhatsAppBusinessAccount1 do
   @moduledoc """
   WhatsApp Business Account owned by the business
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `id` | `String.t()` | Unique identifier for the WhatsApp Business Account |
+  | `message_template_namespace` | `String.t()` | Namespace identifier for message templates associated with this account |
+  | `name` | `String.t()` | Human-readable name of the WhatsApp Business Account |
+  | `timezone_id` | `String.t()` | Timezone identifier for the WhatsApp Business Account |
+
   ## `name` Constraints
 
   - Minimum length: 1

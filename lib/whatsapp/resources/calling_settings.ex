@@ -1,5 +1,20 @@
 defmodule WhatsApp.Resources.CallingSettings do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `audio` | `map()` |  |
+  | `call_hours` | `map()` |  |
+  | `call_icon_visibility` | `String.t()` | Current call icon visibility setting |
+  | `call_icons` | `map()` |  |
+  | `callback_permission_status` | `String.t()` | Callback permission status |
+  | `ip_addresses` | `map()` |  |
+  | `restrictions` | `map()` |  |
+  | `sip` | `map()` |  |
+  | `srtp_key_exchange_protocol` | `String.t()` | SRTP key exchange protocol (optional) |
+  | `status` | `String.t()` | Current calling feature status |
+  | `video` | `map()` |  |
+
   ## `call_icon_visibility` Values
   | Value |
   | --- |

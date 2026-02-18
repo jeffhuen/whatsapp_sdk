@@ -1,5 +1,14 @@
 defmodule WhatsApp.Resources.ErrorObject2 do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `code` | `integer()` | Error code. |
+  | `error_data` | `map()` |  |
+  | `href` | `String.t()` | Link to error code documentation. |
+  | `message` | `String.t()` | Error code message. |
+  | `title` | `String.t()` | Error code title. |
+  """
 
   @type t :: %__MODULE__{
           code: integer(),

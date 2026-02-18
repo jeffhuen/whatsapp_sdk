@@ -1,5 +1,17 @@
 defmodule WhatsApp.Resources.Statuses do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `conversation` | `map()` |  |
+  | `errors` | `list()` |  |
+  | `group_id` | `String.t()` | Group ID if the message was sent to a group. |
+  | `id` | `String.t()` | Unique WhatsApp message ID the status is associated with. |
+  | `pricing` | `map()` |  |
+  | `recipient_id` | `String.t()` | Recipeint phone number. |
+  | `status` | `String.t()` |  |
+  | `timestamp` | `String.t()` |  |
+
   ## `status` Values
   | Value |
   | --- |

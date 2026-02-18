@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.DocumentParameter do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `type` | `term()` |  |
+  | `document` | `map()` | A media object. Either `id` or `link` is required. |
+
   ## `type` Values
   | Value |
   | --- |

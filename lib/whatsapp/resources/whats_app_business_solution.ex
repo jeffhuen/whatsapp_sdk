@@ -2,6 +2,16 @@ defmodule WhatsApp.Resources.WhatsAppBusinessSolution do
   @moduledoc """
   Multi-Partner Solution details and configuration
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `id` | `String.t()` | Unique identifier for the Multi-Partner Solution |
+  | `name` | `String.t()` | Human-readable name of the Multi-Partner Solution |
+  | `owner_app` | `map()` | Meta application that owns the Multi-Partner Solution |
+  | `owner_permissions` | `list()` | List of WhatsApp Business Account permissions granted to the solution owner |
+  | `status` | `String.t()` | Current effective status of the Multi-Partner Solution |
+  | `status_for_pending_request` | `String.t()` | Status of any pending solution status transition requests |
+
   ## `status` Values
   | Value |
   | --- |

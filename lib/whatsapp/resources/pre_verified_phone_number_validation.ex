@@ -2,6 +2,15 @@ defmodule WhatsApp.Resources.PreVerifiedPhoneNumberValidation do
   @moduledoc """
   Pre-verified phone number validation details and status
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `country_prefix` | `integer()` | Country code prefix for the phone number |
+  | `display_phone_number` | `String.t()` | Formatted display version of the phone number |
+  | `error_msg` | `String.t()` | Error message if validation failed |
+  | `id` | `String.t()` | Unique identifier for the pre-verified phone number |
+  | `is_input_id_valid` | `boolean()` | Whether the provided phone number ID is valid |
+
   ## `country_prefix` Constraints
 
   - Minimum value: 1

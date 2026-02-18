@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.UrlObject do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `type` | `String.t()` | URL type |
+  | `url` | `String.t()` | URL |
+
   ## `type` Values
   | Value |
   | --- |

@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.DateTimeParameter do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `type` | `term()` |  |
+  | `date_time` | `map()` |  |
+
   ## `type` Values
   | Value |
   | --- |

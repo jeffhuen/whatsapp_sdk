@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.ListAssetsGetFlowJsonUrl do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `data` | `list()` |  |
+  | `paging` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           data: list(map()) | nil,

@@ -1,5 +1,13 @@
 defmodule WhatsApp.Resources.Error do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `code` | `integer()` | Error code |
+  | `error_data` | `map()` |  |
+  | `message` | `String.t()` | Error message |
+  | `title` | `String.t()` | Error title |
+  """
 
   @type t :: %__MODULE__{
           code: integer() | nil,

@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.PayloadEncryptionSettingsRequest do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `payload_encryption` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           payload_encryption: map()

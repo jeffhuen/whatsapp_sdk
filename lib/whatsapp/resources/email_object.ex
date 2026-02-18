@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.EmailObject do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `email` | `String.t()` | Email address |
+  | `type` | `String.t()` | Email type |
+
   ## `type` Values
   | Value |
   | --- |

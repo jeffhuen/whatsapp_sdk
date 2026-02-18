@@ -1,6 +1,12 @@
 defmodule WhatsApp.Resources.SubscribedApp do
   @moduledoc """
   Application subscribed to the WABA
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `id` | `String.t()` | Application ID |
+  | `name` | `String.t()` | Application name |
   """
 
   @type t :: %__MODULE__{

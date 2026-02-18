@@ -1,6 +1,11 @@
 defmodule WhatsApp.Resources.SubscribedApps do
   @moduledoc """
   Response containing list of subscribed applications
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `data` | `list()` | Array of subscribed applications |
   """
 
   @type t :: %__MODULE__{

@@ -1,5 +1,15 @@
 defmodule WhatsApp.Resources.NameObject do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `first_name` | `String.t()` | First name |
+  | `formatted_name` | `String.t()` | Formatted full name |
+  | `last_name` | `String.t()` | Last name |
+  | `middle_name` | `String.t()` | Middle name |
+  | `prefix` | `String.t()` | Name prefix |
+  | `suffix` | `String.t()` | Name suffix |
+  """
 
   @type t :: %__MODULE__{
           first_name: String.t() | nil,

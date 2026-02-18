@@ -2,6 +2,19 @@ defmodule WhatsApp.Resources.ScheduleCreateRequest do
   @moduledoc """
   Request payload for creating a new schedule
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `days_of_week` | `list()` | Days of the week when the schedule is active |
+  | `description` | `String.t()` | Optional description of the schedule purpose |
+  | `end_time` | `Time.t()` | Schedule end time in HH:MM format |
+  | `is_active` | `boolean()` | Whether the schedule should be active upon creation |
+  | `name` | `String.t()` | Human-readable name for the schedule |
+  | `recurrence_pattern` | `map()` | Pattern for recurring schedules |
+  | `schedule_type` | `String.t()` | Type of schedule configuration |
+  | `start_time` | `Time.t()` | Schedule start time in HH:MM format |
+  | `timezone` | `String.t()` | Timezone identifier for the schedule |
+
   ## `schedule_type` Values
   | Value |
   | --- |

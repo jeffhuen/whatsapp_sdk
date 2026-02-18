@@ -2,6 +2,13 @@ defmodule WhatsApp.Resources.VerifyCodeRequest2 do
   @moduledoc """
   Request payload for verifying OTP code
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `code` | `String.t()` | The numeric verification code received via SMS or voice call.
+  This code is provided after calling the request_code endpoint.
+   |
+
   ## `code` Constraints
 
   - Minimum length: 4

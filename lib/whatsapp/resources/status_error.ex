@@ -1,5 +1,14 @@
 defmodule WhatsApp.Resources.StatusError do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `code` | `integer()` |  |
+  | `error_data` | `map()` |  |
+  | `href` | `String.t()` |  |
+  | `message` | `String.t()` |  |
+  | `title` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           code: integer() | nil,

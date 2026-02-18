@@ -1,6 +1,11 @@
 defmodule WhatsApp.Resources.GraphAPIError2 do
   @moduledoc """
   Standard Graph API error response
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `error` | `map()` |  |
   """
 
   @type t :: %__MODULE__{

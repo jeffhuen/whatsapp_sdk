@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.CallingSettingsRequest do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `calling` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           calling: map()

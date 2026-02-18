@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.Paging do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `cursors` | `map()` |  |
+  """
 
   @type t :: %__MODULE__{
           cursors: map() | nil

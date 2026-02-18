@@ -1,5 +1,15 @@
 defmodule WhatsApp.Resources.AddAssignedUserRequest do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `tasks` | `list()` | Array of permission tasks to grant to the user. These tasks determine
+  what actions the user can perform on the WhatsApp Business Account.
+   |
+  | `user` | `String.t()` | User ID of the person to add to the WhatsApp Business Account.
+  This must be a valid Facebook user ID.
+   |
+
   ## `tasks` Constraints
 
   - Minimum items: 1

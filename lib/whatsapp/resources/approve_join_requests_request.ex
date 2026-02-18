@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.ApproveJoinRequestsRequest do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `join_requests` | `list()` | Array of join request IDs to approve |
+  | `messaging_product` | `String.t()` |  |
+
   ## `messaging_product` Values
   | Value |
   | --- |

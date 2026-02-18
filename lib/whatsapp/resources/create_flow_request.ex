@@ -1,5 +1,13 @@
 defmodule WhatsApp.Resources.CreateFlowRequest do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `categories` | `String.t()` |  |
+  | `clone_flow_id` | `String.t()` |  |
+  | `endpoint_uri` | `String.t()` |  |
+  | `name` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           categories: String.t() | nil,

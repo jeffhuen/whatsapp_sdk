@@ -2,6 +2,16 @@ defmodule WhatsApp.Resources.WhatsAppBusinessSolutionAcceptRequest do
   @moduledoc """
   Request payload for accepting a Multi-Partner Solution invitation
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `log_session_id` | `String.t()` | Optional session identifier for logging and debugging purposes.
+  Used to track the acceptance flow across multiple API calls.
+   |
+  | `partner_app_id` | `String.t()` | ID of the partner application accepting the solution invitation.
+  This must match the app ID that received the original invitation.
+   |
+
   ## `partner_app_id` Constraints
 
   - Pattern: `^[0-9]+$`

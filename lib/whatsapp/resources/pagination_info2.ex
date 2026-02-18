@@ -1,6 +1,12 @@
 defmodule WhatsApp.Resources.PaginationInfo2 do
   @moduledoc """
   Pagination information for cursor-based pagination
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `cursors` | `map()` |  |
+  | `paging` | `map()` |  |
   """
 
   @type t :: %__MODULE__{

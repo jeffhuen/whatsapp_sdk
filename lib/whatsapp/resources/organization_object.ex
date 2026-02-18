@@ -1,5 +1,12 @@
 defmodule WhatsApp.Resources.OrganizationObject do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `company` | `String.t()` | Company name |
+  | `department` | `String.t()` | Department name |
+  | `title` | `String.t()` | Job title |
+  """
 
   @type t :: %__MODULE__{
           company: String.t() | nil,

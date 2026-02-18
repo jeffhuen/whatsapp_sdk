@@ -1,5 +1,10 @@
 defmodule WhatsApp.Resources.ConversationOrigin do
-  @moduledoc false
+  @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `type` | `String.t()` |  |
+  """
 
   @type t :: %__MODULE__{
           type: String.t() | nil

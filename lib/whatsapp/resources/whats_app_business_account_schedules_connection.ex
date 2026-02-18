@@ -1,6 +1,12 @@
 defmodule WhatsApp.Resources.WhatsAppBusinessAccountSchedulesConnection do
   @moduledoc """
   Paginated collection of WhatsApp Business Account schedules
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `data` | `list()` | Array of schedule records |
+  | `paging` | `map()` | Cursor-based pagination information |
   """
 
   @type t :: %__MODULE__{

@@ -160,11 +160,18 @@ defmodule WhatsApp.Generator.ServiceGenerator do
         Enum.map(operation.request_examples, fn example ->
           label = example.summary || example.name
           value = inspect(example.value, pretty: true, limit: :infinity)
+          value = escape_example_urls(value)
           "### #{label}\n\n    #{value}"
         end)
 
       "## Examples\n\n" <> Enum.join(examples, "\n\n")
     end
+  end
+
+  # Escape angle-bracket URLs like <http(s)://...> that ExDoc would parse as
+  # auto-links. Replace angle brackets with backtick-escaped versions.
+  defp escape_example_urls(text) do
+    Regex.replace(~r/<(http\(s\):\/\/[^>]+)>/, text, fn _full, url -> url end)
   end
 
   # ---------------------------------------------------------------------------

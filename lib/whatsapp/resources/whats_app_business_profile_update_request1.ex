@@ -2,6 +2,19 @@ defmodule WhatsApp.Resources.WhatsAppBusinessProfileUpdateRequest1 do
   @moduledoc """
   Request payload for updating WhatsApp Business Profile information
 
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `about` | `String.t()` | About section text for the business profile |
+  | `account_name` | `String.t()` | Name of the business account |
+  | `address` | `String.t()` | Physical address of the business |
+  | `description` | `String.t()` | Business description text |
+  | `email` | `String.t()` | Contact email address of the business |
+  | `messaging_product` | `String.t()` | The messaging service used for the request |
+  | `profile_picture_handle` | `String.t()` | Handle of the profile picture generated from Resumable Upload API |
+  | `vertical` | `String.t()` | The industry type of the business |
+  | `websites` | `list()` | List of website URLs associated with the business |
+
   ## `messaging_product` Values
   | Value |
   | --- |

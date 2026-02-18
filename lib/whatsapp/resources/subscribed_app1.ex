@@ -1,6 +1,12 @@
 defmodule WhatsApp.Resources.SubscribedApp1 do
   @moduledoc """
   Subscribed application details
+
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `override_callback_uri` | `String.t()` | Custom webhook callback URL for this subscription |
+  | `whatsapp_business_api_data` | `map()` | WhatsApp Business API configuration data |
   """
 
   @type t :: %__MODULE__{

@@ -1,5 +1,11 @@
 defmodule WhatsApp.Resources.AddGroupParticipantsRequest do
   @moduledoc """
+  ## Fields
+  | Field | Type | Description |
+  | --- | --- | --- |
+  | `messaging_product` | `String.t()` |  |
+  | `participants` | `list()` | Array of phone numbers or WhatsApp IDs to remove (max 8 participants) |
+
   ## `messaging_product` Values
   | Value |
   | --- |
