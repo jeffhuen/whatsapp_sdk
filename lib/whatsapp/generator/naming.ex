@@ -28,9 +28,16 @@ defmodule WhatsApp.Generator.Naming do
   @doc false
   @spec resource_module_name(String.t()) :: String.t()
   def resource_module_name(schema_name) do
-    schema_name
-    |> String.replace(~r/Details$/, "")
-    |> String.replace(~r/Response$/, "")
+    name =
+      schema_name
+      |> String.replace(~r/Details$/, "")
+      |> String.replace(~r/Response$/, "")
+      # Strip underscores before digits for valid PascalCase (e.g. "CursorPaging_1" → "CursorPaging1")
+      |> String.replace(~r/_(\d)/, "\\1")
+
+    # Ensure PascalCase — capitalize first character for valid module names
+    <<first::utf8, rest::binary>> = name
+    <<String.upcase(<<first::utf8>>)::binary, rest::binary>>
   end
 
   # Build service file path
@@ -127,7 +134,7 @@ defmodule WhatsApp.Generator.Naming do
   # Private helpers
 
   defp find_available(base, existing, n) do
-    candidate = "#{base}_#{n}"
+    candidate = "#{base}#{n}"
 
     if candidate in existing do
       find_available(base, existing, n + 1)
@@ -139,7 +146,6 @@ defmodule WhatsApp.Generator.Naming do
   defp camelize(string) do
     string
     |> String.split("_")
-    |> Enum.map(&String.capitalize/1)
-    |> Enum.join()
+    |> Enum.map_join(&String.capitalize/1)
   end
 end

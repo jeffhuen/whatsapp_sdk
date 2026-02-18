@@ -50,6 +50,38 @@ defmodule WhatsApp.Test do
   from one another.
   """
 
+  @typedoc """
+  Stub request map passed to the stub function.
+
+  Fields match the HTTP request sent by the client:
+
+    * `:method` - HTTP method atom (`:get`, `:post`, `:put`, `:delete`, `:patch`)
+    * `:url` - Full request URL string
+    * `:headers` - List of `{name, value}` header tuples
+    * `:body` - Request body (string, nil, or `{:multipart, parts}`)
+  """
+  @type request :: %{
+          method: :get | :post | :put | :delete | :patch,
+          url: String.t(),
+          headers: [{String.t(), String.t()}],
+          body: String.t() | nil | {:multipart, list()}
+        }
+
+  @typedoc """
+  Stub response map returned from the stub function.
+
+  Fields mirror a standard HTTP response:
+
+    * `:status` - HTTP status code integer (e.g., `200`, `400`, `429`)
+    * `:body` - Response body as a JSON string
+    * `:headers` - List of `{name, value}` header tuples (default: `[]`)
+  """
+  @type response :: %{
+          status: non_neg_integer(),
+          body: String.t(),
+          headers: [{String.t(), String.t()}]
+        }
+
   @ownership_server __MODULE__
   @key :http_stub
 
@@ -58,7 +90,7 @@ defmodule WhatsApp.Test do
 
   Call this in `test/test_helper.exs` before `ExUnit.start()`.
   """
-  @spec start() :: {:ok, pid()} | {:error, term()}
+  @spec start() :: {:ok, pid()} | :ignore | {:error, term()}
   def start do
     NimbleOwnership.start_link(name: @ownership_server)
   end
@@ -85,7 +117,7 @@ defmodule WhatsApp.Test do
         %{status: 200, body: ~s({"success":true}), headers: []}
       end)
   """
-  @spec stub((map() -> map())) :: :ok
+  @spec stub((request() -> response())) :: :ok
   def stub(fun) when is_function(fun, 1) do
     case NimbleOwnership.get_and_update(@ownership_server, self(), @key, fn _existing ->
            {:ok, fun}
@@ -100,19 +132,14 @@ defmodule WhatsApp.Test do
   # This is called internally by the Client to check for stubs before
   # making real HTTP calls.
   @doc false
-  @spec fetch_fun() :: {:ok, (map() -> map())} | :error
+  @spec fetch_fun() :: {:ok, (request() -> response())} | :error
   def fetch_fun do
-    case NimbleOwnership.fetch_owner(@ownership_server, callers(), @key) do
-      {:ok, owner_pid} ->
-        case NimbleOwnership.get_and_update(@ownership_server, owner_pid, @key, fn fun ->
-               {fun, fun}
-             end) do
-          {:ok, fun} when is_function(fun, 1) -> {:ok, fun}
-          _ -> :error
-        end
-
-      :error ->
-        :error
+    with {:ok, owner_pid} <- NimbleOwnership.fetch_owner(@ownership_server, callers(), @key),
+         {:ok, fun} when is_function(fun, 1) <-
+           NimbleOwnership.get_and_update(@ownership_server, owner_pid, @key, &{&1, &1}) do
+      {:ok, fun}
+    else
+      _ -> :error
     end
   end
 

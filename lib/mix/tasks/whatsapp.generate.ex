@@ -35,7 +35,7 @@ defmodule Mix.Tasks.Whatsapp.Generate do
 
     spec_path = find_spec_file!()
     parsed = OpenAPI.parse(spec_path)
-    output_dir = Mix.Project.app_path() |> Path.join("../../..") |> Path.expand()
+    output_dir = File.cwd!()
 
     if opts[:dry_run] do
       run_dry(parsed)
@@ -53,8 +53,7 @@ defmodule Mix.Tasks.Whatsapp.Generate do
   # ── Spec discovery ─────────────────────────────────────────────────────
 
   defp find_spec_file! do
-    priv_dir =
-      Path.join(Mix.Project.app_path() |> Path.join("../../..") |> Path.expand(), "priv/openapi")
+    priv_dir = Path.join(File.cwd!(), "priv/openapi")
 
     case Path.wildcard(Path.join(priv_dir, "*.json")) do
       [first | _] ->
@@ -105,18 +104,19 @@ defmodule Mix.Tasks.Whatsapp.Generate do
   defp clean!(parsed, output_dir) do
     # Remove generated resource directory
     resources_dir = Path.join(output_dir, "lib/whatsapp/resources")
-    File.rm_rf!(resources_dir)
+    _ = File.rm_rf!(resources_dir)
 
     # Remove generated service directories (one per domain)
     Enum.each(parsed.domains, fn domain ->
       dir_name = Macro.underscore(domain.module_name)
       service_dir = Path.join(output_dir, "lib/whatsapp/#{dir_name}")
-      File.rm_rf!(service_dir)
+      _ = File.rm_rf!(service_dir)
     end)
 
     # Remove generated registry file
     registry_path = Path.join(output_dir, "lib/whatsapp/object_types.ex")
-    File.rm(registry_path)
+    _ = File.rm(registry_path)
+    :ok
   end
 
   # ── Stats ──────────────────────────────────────────────────────────────
@@ -148,7 +148,7 @@ defmodule Mix.Tasks.Whatsapp.Generate do
 
   defp skip_schema?(_), do: true
 
-  defp no_properties?(%{properties: props}) when is_list(props) and length(props) > 0, do: false
+  defp no_properties?(%{properties: [_ | _]}), do: false
   defp no_properties?(_), do: true
 
   defp has_all_of?(%{all_of: all_of}) when is_list(all_of), do: true

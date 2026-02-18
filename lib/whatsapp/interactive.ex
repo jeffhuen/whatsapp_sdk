@@ -34,7 +34,7 @@ defmodule WhatsApp.Interactive do
   ## Options
 
     * `:header` - Optional header text
-    * `:footer` - Optional footer text
+    * `:footer` - Optional footer text (max 60 characters per OpenAPI spec)
   """
   @spec buttons(String.t(), keyword()) :: builder()
   def buttons(body_text, opts \\ []) do
@@ -50,13 +50,22 @@ defmodule WhatsApp.Interactive do
   @doc """
   Add a reply button to a button message.
 
-  Title must be at most 20 bytes. A maximum of 3 buttons per message is
-  supported by the WhatsApp API.
+  ## OpenAPI Constraints
+
+    * Maximum 3 buttons per message (`maxItems: 3`)
+    * Minimum 1 button required (`minItems: 1`)
+    * `id` — unique identifier, max 256 characters (`maxLength: 256`).
+      No leading or trailing spaces.
+    * `title` — button label, max 20 characters (`maxLength: 20`).
+      Cannot be empty, must be unique across buttons. Emojis supported, no markdown.
   """
+  @max_buttons 3
+
   @spec button(builder(), String.t(), String.t()) :: builder()
-  def button(builder, id, title) when byte_size(title) <= 20 do
+  def button(%{"action" => %{"buttons" => buttons}} = builder, id, title)
+      when length(buttons) < @max_buttons and byte_size(title) <= 20 do
     btn = %{"type" => "reply", "reply" => %{"id" => id, "title" => title}}
-    update_in(builder, ["action", "buttons"], &(&1 ++ [btn]))
+    put_in(builder, ["action", "buttons"], buttons ++ [btn])
   end
 
   # ---------- List Messages ----------
@@ -68,6 +77,11 @@ defmodule WhatsApp.Interactive do
 
     * `:header` - Optional header text
     * `:footer` - Optional footer text
+
+  ## OpenAPI Constraints
+
+    * `button_text` — button label, max 20 characters (`maxLength: 20`).
+      Cannot be empty. Emojis supported, no markdown.
   """
   @spec list(String.t(), String.t(), keyword()) :: builder()
   def list(body_text, button_text, opts \\ []) do
@@ -82,6 +96,10 @@ defmodule WhatsApp.Interactive do
 
   @doc """
   Add a section with rows to a list message.
+
+  ## OpenAPI Constraints
+
+    * `title` — section title, max 24 characters (`maxLength: 24`)
   """
   @spec section(builder(), String.t(), [map()]) :: builder()
   def section(builder, title, rows) do
@@ -93,6 +111,12 @@ defmodule WhatsApp.Interactive do
   Create a row for a list section.
 
   Description is optional and only included when provided.
+
+  ## OpenAPI Constraints
+
+    * `id` — unique row identifier, max 200 characters (`maxLength: 200`)
+    * `title` — row title, max 24 characters (`maxLength: 24`)
+    * `description` — optional, max 72 characters (`maxLength: 72`)
   """
   @spec row(String.t(), String.t(), String.t() | nil) :: map()
   def row(id, title, description \\ nil) do

@@ -61,7 +61,7 @@ defmodule WhatsApp.Generator.RegistryGenerator do
 
   defp skip_schema?(_), do: true
 
-  defp no_properties?(%{properties: props}) when is_list(props) and length(props) > 0, do: false
+  defp no_properties?(%{properties: [_ | _]}), do: false
   defp no_properties?(_), do: true
 
   defp has_all_of?(%{all_of: all_of}) when is_list(all_of), do: true

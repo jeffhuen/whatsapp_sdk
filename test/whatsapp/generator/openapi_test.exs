@@ -237,7 +237,7 @@ defmodule WhatsApp.Generator.OpenAPITest do
   describe "parse_domains — tag-based grouping" do
     test "returns a list of domain maps", %{result: result} do
       assert is_list(result.domains)
-      assert length(result.domains) > 0
+      assert result.domains != []
     end
 
     test "Messages domain exists with correct structure", %{result: result} do

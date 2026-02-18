@@ -148,19 +148,10 @@ defmodule WhatsApp.Client do
     headers = build_headers(client, opts)
     {encoded_body, headers} = encode_body(opts, headers)
 
+    req = %{method: method, path: path, url: url, headers: headers, body: encoded_body}
+
     maybe_telemetry(client, method, path, fn ->
-      execute_with_retries(
-        client,
-        method,
-        path,
-        url,
-        headers,
-        encoded_body,
-        return_response,
-        max_retries,
-        request_fn,
-        0
-      )
+      execute_with_retries(client, req, return_response, max_retries, request_fn, 0)
     end)
   end
 
@@ -179,20 +170,10 @@ defmodule WhatsApp.Client do
     max_retries = Keyword.get(opts, :max_retries, client.max_retries)
     request_fn = Keyword.get(opts, :request_fn)
     headers = build_headers(client, opts)
+    req = %{method: :get, path: url, url: url, headers: headers, body: nil}
 
     maybe_telemetry(client, :get, url, fn ->
-      execute_with_retries(
-        client,
-        :get,
-        url,
-        url,
-        headers,
-        nil,
-        return_response,
-        max_retries,
-        request_fn,
-        0
-      )
+      execute_with_retries(client, req, return_response, max_retries, request_fn, 0)
     end)
   end
 
@@ -293,84 +274,97 @@ defmodule WhatsApp.Client do
   # Retry Loop
   # ---------------------------------------------------------------------------
 
-  defp execute_with_retries(
-         client,
-         method,
-         path,
-         url,
-         headers,
-         body,
-         return_response,
-         max_retries,
-         request_fn,
-         attempt
-       ) do
-    result = do_single_request(client, method, url, headers, body, request_fn)
+  defp execute_with_retries(client, req, return_response, max_retries, request_fn, attempt) do
+    result =
+      case do_single_request(client, req.method, req.url, req.headers, req.body, request_fn) do
+        {:ok, status, resp_body, resp_headers} ->
+          classify_response(status, resp_body, resp_headers, return_response)
 
-    case classify_result(result, return_response) do
+        {:retry, _, _} = retry ->
+          retry
+      end
+
+    case result do
       {:ok, response} ->
         response
 
       {:retry, reason, raw_result} when attempt < max_retries ->
         wait_ms = retry_wait_ms(reason, raw_result, attempt)
-        Telemetry.emit_retry(method, path, attempt + 1, %{reason: reason, wait_ms: wait_ms})
-        Process.sleep(wait_ms)
 
-        execute_with_retries(
-          client,
-          method,
-          path,
-          url,
-          headers,
-          body,
-          return_response,
-          max_retries,
-          request_fn,
-          attempt + 1
-        )
+        Telemetry.emit_retry(req.method, req.path, attempt + 1, %{
+          reason: reason,
+          wait_ms: wait_ms
+        })
+
+        Process.sleep(wait_ms)
+        execute_with_retries(client, req, return_response, max_retries, request_fn, attempt + 1)
 
       {:retry, _reason, raw_result} ->
         finalize_error(raw_result)
 
-      {:error, final_error} ->
-        final_error
+      {:error, _} = error ->
+        error
     end
   end
 
+  # Normalize all request paths to {:ok, status, body, headers} | {:retry, ...}
   defp do_single_request(client, method, url, headers, body, nil) do
-    execute_request(client, method, url, headers, body)
+    case fetch_stub() do
+      {:ok, fun} ->
+        request = %{method: method, url: url, headers: headers, body: body}
+        response = fun.(request)
+        {:ok, response.status, response.body, Map.get(response, :headers, [])}
+
+      :error ->
+        case execute_request(client, method, url, headers, body) do
+          {:ok, %Finch.Response{status: status, body: resp_body, headers: resp_headers}} ->
+            {:ok, status, resp_body, resp_headers}
+
+          {:error, exception} ->
+            {:retry, :connection_error, {:connection_error, exception}}
+        end
+    end
   end
 
   defp do_single_request(_client, method, url, headers, body, request_fn) do
-    request_fn.(method, url, headers, body, [])
-  end
-
-  defp classify_result(result, return_response) do
-    case result do
-      {:ok, %Finch.Response{status: status} = finch_resp} when status >= 200 and status < 300 ->
-        response = Response.from_finch(finch_resp)
-        data = decode_body(finch_resp.body)
-
-        if return_response do
-          {:ok, {:ok, data, response}}
-        else
-          {:ok, {:ok, data}}
-        end
-
+    case request_fn.(method, url, headers, body, []) do
       {:ok, %Finch.Response{status: status, body: resp_body, headers: resp_headers}} ->
-        body_data = decode_body(resp_body)
-        raw = {:api_error, status, body_data, resp_headers}
-
-        if retryable_status?(status, body_data) do
-          reason = retry_reason(status, body_data)
-          {:retry, reason, raw}
-        else
-          {:error, finalize_error(raw)}
-        end
+        {:ok, status, resp_body, resp_headers}
 
       {:error, exception} ->
-        raw = {:connection_error, exception}
-        {:retry, :connection_error, raw}
+        {:retry, :connection_error, {:connection_error, exception}}
+    end
+  end
+
+  defp fetch_stub do
+    if Process.whereis(WhatsApp.Test) do
+      WhatsApp.Test.fetch_fun()
+    else
+      :error
+    end
+  end
+
+  defp classify_response(status, body, headers, return_response)
+       when status >= 200 and status < 300 do
+    data = decode_body(body)
+
+    if return_response do
+      response = Response.from_fields(status, headers)
+      {:ok, {:ok, data, response}}
+    else
+      {:ok, {:ok, data}}
+    end
+  end
+
+  defp classify_response(status, body, headers, _return_response) do
+    body_data = decode_body(body)
+    raw = {:api_error, status, body_data, headers}
+
+    if retryable_status?(status, body_data) do
+      reason = retry_reason(status, body_data)
+      {:retry, reason, raw}
+    else
+      finalize_error(raw)
     end
   end
 
@@ -417,8 +411,11 @@ defmodule WhatsApp.Client do
 
   defp execute_request(client, method, url, headers, body) do
     finch_request = build_finch_request(method, url, headers, body)
-    receive_timeout = client.read_timeout
-    Finch.request(finch_request, client.finch, receive_timeout: receive_timeout)
+
+    Finch.request(finch_request, client.finch,
+      pool_timeout: client.open_timeout,
+      receive_timeout: client.read_timeout
+    )
   end
 
   defp build_finch_request(method, url, headers, {:multipart, parts}) do
@@ -448,28 +445,22 @@ defmodule WhatsApp.Client do
         {:file, path, name, content_type} ->
           file_content = File.read!(path)
           filename = Path.basename(path)
-
-          "--#{boundary}\r\n" <>
-            "content-disposition: form-data; name=\"#{name}\"; filename=\"#{filename}\"\r\n" <>
-            "content-type: #{content_type}\r\n" <>
-            "\r\n" <>
-            file_content <> "\r\n"
+          encode_multipart_file(boundary, name, filename, content_type, file_content)
 
         {:file_content, content, name, content_type} ->
-          "--#{boundary}\r\n" <>
-            "content-disposition: form-data; name=\"#{name}\"; filename=\"#{name}\"\r\n" <>
-            "content-type: #{content_type}\r\n" <>
-            "\r\n" <>
-            content <> "\r\n"
+          encode_multipart_file(boundary, name, name, content_type, content)
 
         {name, value} ->
-          "--#{boundary}\r\n" <>
-            "content-disposition: form-data; name=\"#{name}\"\r\n" <>
-            "\r\n" <>
+          ~s(--#{boundary}\r\ncontent-disposition: form-data; name="#{name}"\r\n\r\n) <>
             value <> "\r\n"
       end)
 
     IO.iodata_to_binary([encoded_parts, "--#{boundary}--\r\n"])
+  end
+
+  defp encode_multipart_file(boundary, name, filename, content_type, content) do
+    ~s(--#{boundary}\r\ncontent-disposition: form-data; name="#{name}"; filename="#{filename}"\r\ncontent-type: #{content_type}\r\n\r\n) <>
+      content <> "\r\n"
   end
 
   defp decode_body(""), do: %{}

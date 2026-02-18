@@ -87,10 +87,7 @@ defmodule WhatsApp.Generator.OpenAPI do
   def parse_auth(raw) do
     security_schemes = get_in(raw, ["components", "securitySchemes"]) || %{}
 
-    cond do
-      Map.has_key?(security_schemes, "bearerAuth") -> :bearer
-      true -> nil
-    end
+    if Map.has_key?(security_schemes, "bearerAuth"), do: :bearer
   end
 
   # ── Step 3: Tags ────────────────────────────────────────────────────────
@@ -416,8 +413,7 @@ defmodule WhatsApp.Generator.OpenAPI do
       segment
       |> String.replace("_", " ")
       |> String.split()
-      |> Enum.map(&String.capitalize/1)
-      |> Enum.join(" ")
+      |> Enum.map_join(" ", &String.capitalize/1)
     end)
   end
 
@@ -459,8 +455,7 @@ defmodule WhatsApp.Generator.OpenAPI do
   defp resource_module_from_key(key) do
     key
     |> String.split("_")
-    |> Enum.map(&String.capitalize/1)
-    |> Enum.join()
+    |> Enum.map_join(&String.capitalize/1)
   end
 
   # ── Step 7: Operation parsing ──────────────────────────────────────────
@@ -632,26 +627,27 @@ defmodule WhatsApp.Generator.OpenAPI do
     |> Map.new(fn {status_code, response} ->
       resolved = resolve_ref(raw, response)
       status = parse_status_code(status_code)
-
-      examples =
-        case get_in(resolved, ["content", "application/json", "examples"]) do
-          nil ->
-            []
-
-          examples_map ->
-            Enum.map(examples_map, fn {name, example} ->
-              %{
-                name: name,
-                summary: Map.get(example, "summary"),
-                value: Map.get(example, "value")
-              }
-            end)
-        end
-
+      examples = extract_json_examples(resolved)
       {status, examples}
     end)
     |> Enum.reject(fn {_status, examples} -> examples == [] end)
     |> Map.new()
+  end
+
+  defp extract_json_examples(resolved_response) do
+    case get_in(resolved_response, ["content", "application/json", "examples"]) do
+      nil ->
+        []
+
+      examples_map ->
+        Enum.map(examples_map, fn {name, example} ->
+          %{
+            name: name,
+            summary: Map.get(example, "summary"),
+            value: Map.get(example, "value")
+          }
+        end)
+    end
   end
 
   # ── Step 9: Parameters ─────────────────────────────────────────────────
@@ -733,22 +729,23 @@ defmodule WhatsApp.Generator.OpenAPI do
     |> Enum.flat_map(fn {_path, path_item} ->
       path_item
       |> operation_entries()
-      |> Enum.flat_map(fn {_method, operation} ->
-        operation
-        |> Map.get("responses", %{})
-        |> Enum.flat_map(fn {_status, response} ->
-          resolved = resolve_ref(raw, response)
-
-          resolved
-          |> Map.get("headers", %{})
-          |> Enum.map(fn {name, header} ->
-            resolved_header = resolve_ref(raw, header)
-            {name, normalize_header(resolved_header)}
-          end)
-        end)
-      end)
+      |> Enum.flat_map(&extract_response_header_entries(raw, elem(&1, 1)))
     end)
     |> Map.new()
+  end
+
+  defp extract_response_header_entries(raw, operation) do
+    operation
+    |> Map.get("responses", %{})
+    |> Enum.flat_map(fn {_status, response} ->
+      resolved = resolve_ref(raw, response)
+
+      resolved
+      |> Map.get("headers", %{})
+      |> Enum.map(fn {name, header} ->
+        {name, raw |> resolve_ref(header) |> normalize_header()}
+      end)
+    end)
   end
 
   defp normalize_header(header) do

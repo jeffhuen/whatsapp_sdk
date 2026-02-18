@@ -32,6 +32,7 @@ defmodule WhatsApp.MixProject do
       ],
       dialyzer: [
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
+        plt_add_apps: [:mix],
         flags: [:unmatched_returns, :error_handling, :extra_return, :missing_return]
       ],
       compilers: Mix.compilers()
@@ -78,7 +79,8 @@ defmodule WhatsApp.MixProject do
     [
       name: "whatsapp_sdk",
       description:
-        "Elixir SDK for the WhatsApp Business Platform Cloud API. Generated from Meta's official OpenAPI spec.",
+        "Comprehensive Elixir SDK for the WhatsApp Business Platform Cloud API with full endpoint coverage. 79 service modules, 352 typed resource structs, and 113 operations generated from Meta's official OpenAPI spec.",
+      maintainers: ["Jeff Huen"],
       licenses: ["MIT"],
       links: %{"GitHub" => @source_url},
       files: ~w(lib .formatter.exs mix.exs README.md LICENSE CHANGELOG.md OPENAPI_VERSION),

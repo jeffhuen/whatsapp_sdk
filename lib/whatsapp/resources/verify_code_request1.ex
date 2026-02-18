@@ -1,0 +1,17 @@
+defmodule WhatsApp.Resources.VerifyCodeRequest1 do
+  @moduledoc """
+  Request payload for phone number verification code verification
+
+  ## `code` Constraints
+
+  - Pattern: `^[0-9]{6}$`
+  """
+
+  @type t :: %__MODULE__{
+          code: String.t()
+        }
+  @enforce_keys [:code]
+  defstruct [
+    :code
+  ]
+end

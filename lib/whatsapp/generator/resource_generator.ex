@@ -45,7 +45,7 @@ defmodule WhatsApp.Generator.ResourceGenerator do
 
   defp skip_schema?(_), do: true
 
-  defp no_properties?(%{properties: props}) when is_list(props) and length(props) > 0, do: false
+  defp no_properties?(%{properties: [_ | _]}), do: false
   defp no_properties?(_), do: true
 
   defp has_all_of?(%{all_of: all_of}) when is_list(all_of), do: true
@@ -175,28 +175,19 @@ defmodule WhatsApp.Generator.ResourceGenerator do
   end
 
   defp build_enum_docs(properties) do
-    enum_props =
-      Enum.filter(properties, fn prop ->
-        Map.has_key?(prop, :enum)
-      end)
+    enum_props = Enum.filter(properties, &Map.has_key?(&1, :enum))
 
     if enum_props == [] do
       nil
     else
-      sections =
-        Enum.map(enum_props, fn prop ->
-          header = "## `#{prop.name}` Values\n"
-
-          rows =
-            Enum.map_join(prop.enum, "\n", fn val ->
-              "| `#{val}` |"
-            end)
-
-          header <> "| Value |\n| --- |\n" <> rows
-        end)
-
-      Enum.join(sections, "\n\n")
+      Enum.map_join(enum_props, "\n\n", &format_enum_section/1)
     end
+  end
+
+  defp format_enum_section(prop) do
+    header = "## `#{prop.name}` Values\n"
+    rows = Enum.map_join(prop.enum, "\n", fn val -> "| `#{val}` |" end)
+    header <> "| Value |\n| --- |\n" <> rows
   end
 
   defp build_constraint_docs(properties) do
@@ -258,20 +249,22 @@ defmodule WhatsApp.Generator.ResourceGenerator do
       "  @type t :: %__MODULE__{}"
     else
       fields =
-        Enum.map_join(properties, ",\n", fn prop ->
-          field_name = prop_field_name(prop.name)
-          type = map_type(prop, all_schemas)
-
-          nullable =
-            Map.get(prop, :nullable, false) == true or
-              prop.name not in required_fields
-
-          full_type = if nullable, do: "#{type} | nil", else: type
-          "    #{field_name}: #{full_type}"
-        end)
+        Enum.map_join(properties, ",\n", &format_type_field(&1, required_fields, all_schemas))
 
       "  @type t :: %__MODULE__{\n#{fields}\n  }"
     end
+  end
+
+  defp format_type_field(prop, required_fields, all_schemas) do
+    field_name = prop_field_name(prop.name)
+    type = map_type(prop, all_schemas)
+
+    nullable =
+      Map.get(prop, :nullable, false) == true or
+        prop.name not in required_fields
+
+    full_type = if nullable, do: "#{type} | nil", else: type
+    "    #{field_name}: #{full_type}"
   end
 
   defp map_type(prop, all_schemas) do
@@ -295,18 +288,32 @@ defmodule WhatsApp.Generator.ResourceGenerator do
     "list(#{inner})"
   end
 
-  defp do_map_type({:ref, ref_name}, _format, _prop, _schemas) do
-    module_name = Naming.resource_module_name(ref_name)
-    "WhatsApp.Resources.#{module_name}.t()"
+  defp do_map_type({:ref, ref_name}, _format, _prop, schemas) do
+    case Map.get(schemas, ref_name) do
+      nil ->
+        "term()"
+
+      schema ->
+        if skip_schema?(schema),
+          do: "term()",
+          else: "WhatsApp.Resources.#{Naming.resource_module_name(ref_name)}.t()"
+    end
   end
 
   defp do_map_type(:union, _format, _prop, _schemas), do: "term()"
   defp do_map_type(nil, _format, _prop, _schemas), do: "term()"
   defp do_map_type(_other, _format, _prop, _schemas), do: "term()"
 
-  defp map_item_type({:ref, ref_name}, _schemas) do
-    module_name = Naming.resource_module_name(ref_name)
-    "WhatsApp.Resources.#{module_name}.t()"
+  defp map_item_type({:ref, ref_name}, schemas) do
+    case Map.get(schemas, ref_name) do
+      nil ->
+        "term()"
+
+      schema ->
+        if skip_schema?(schema),
+          do: "term()",
+          else: "WhatsApp.Resources.#{Naming.resource_module_name(ref_name)}.t()"
+    end
   end
 
   defp map_item_type(:string, _schemas), do: "String.t()"
@@ -340,18 +347,24 @@ defmodule WhatsApp.Generator.ResourceGenerator do
     if properties == [] do
       "  defstruct []"
     else
-      fields =
-        Enum.map_join(properties, ",\n", fn prop ->
-          field = prop_field_name(prop.name)
-          default = resolve_default(prop, required_fields)
-
-          case default do
-            :no_default -> "    :#{field}"
-            value -> "    #{field}: #{inspect(value)}"
-          end
+      # Bare atoms must come before keyword entries in defstruct
+      {bare, defaulted} =
+        Enum.split_with(properties, fn prop ->
+          resolve_default(prop, required_fields) == :no_default
         end)
 
+      sorted = bare ++ defaulted
+      fields = Enum.map_join(sorted, ",\n", &format_struct_field(&1, required_fields))
       "  defstruct [\n#{fields}\n  ]"
+    end
+  end
+
+  defp format_struct_field(prop, required_fields) do
+    field = prop_field_name(prop.name)
+
+    case resolve_default(prop, required_fields) do
+      :no_default -> "    :#{field}"
+      value -> "    #{field}: #{inspect(value)}"
     end
   end
 

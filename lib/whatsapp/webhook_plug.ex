@@ -141,11 +141,15 @@ defmodule WhatsApp.WebhookPlug do
         {raw_body, conn}
 
       _ ->
-        case read_body(conn) do
-          {:ok, body, conn} -> {body, conn}
-          {:more, _partial, conn} -> {"", conn}
-          {:error, _reason} -> {"", conn}
-        end
+        read_full_body(conn, [])
+    end
+  end
+
+  defp read_full_body(conn, acc) do
+    case read_body(conn) do
+      {:ok, body, conn} -> {IO.iodata_to_binary([acc, body]), conn}
+      {:more, partial, conn} -> read_full_body(conn, [acc, partial])
+      {:error, _reason} -> {"", conn}
     end
   end
 

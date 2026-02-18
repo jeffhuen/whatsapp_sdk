@@ -306,7 +306,7 @@ defmodule WhatsApp.Generator.ResourceGeneratorTest do
   describe "return value" do
     test "returns {:ok, paths} tuple", %{paths: paths} do
       assert is_list(paths)
-      assert length(paths) > 0
+      assert paths != []
     end
 
     test "all returned paths exist on disk", %{paths: paths} do

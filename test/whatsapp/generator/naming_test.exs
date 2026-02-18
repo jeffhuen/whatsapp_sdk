@@ -99,17 +99,17 @@ defmodule WhatsApp.Generator.NamingTest do
 
     test "appends suffix on collision" do
       existing = MapSet.new(["TextMessage"])
-      assert Naming.resolve_collision("TextMessage", existing) == "TextMessage_1"
+      assert Naming.resolve_collision("TextMessage", existing) == "TextMessage1"
     end
 
     test "increments suffix on multiple collisions" do
-      existing = MapSet.new(["TextMessage", "TextMessage_1"])
-      assert Naming.resolve_collision("TextMessage", existing) == "TextMessage_2"
+      existing = MapSet.new(["TextMessage", "TextMessage1"])
+      assert Naming.resolve_collision("TextMessage", existing) == "TextMessage2"
     end
 
     test "handles deeply nested collisions" do
-      existing = MapSet.new(["Foo", "Foo_1", "Foo_2", "Foo_3"])
-      assert Naming.resolve_collision("Foo", existing) == "Foo_4"
+      existing = MapSet.new(["Foo", "Foo1", "Foo2", "Foo3"])
+      assert Naming.resolve_collision("Foo", existing) == "Foo4"
     end
   end
 

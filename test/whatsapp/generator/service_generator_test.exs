@@ -22,8 +22,8 @@ defmodule WhatsApp.Generator.ServiceGeneratorTest do
 
   describe "file creation" do
     test "generates correct number of service files", %{generated: generated} do
-      # messages/messages, media/media, media/root, groups/groups
-      assert length(generated) == 4
+      # messages/messages, media/media, media/root, groups/groups, businessprofiles/whatsapp_business_profile
+      assert length(generated) == 5
     end
 
     test "generates messages service at expected path", %{
@@ -70,12 +70,30 @@ defmodule WhatsApp.Generator.ServiceGeneratorTest do
       assert File.exists?(full)
     end
 
+    test "generates business profiles service at expected path", %{
+      generated: generated,
+      output_dir: output_dir
+    } do
+      paths = Enum.map(generated, &elem(&1, 0))
+
+      assert "lib/whatsapp/businessprofiles/whatsapp_business_profile_service.ex" in paths
+
+      full =
+        Path.join(
+          output_dir,
+          "lib/whatsapp/businessprofiles/whatsapp_business_profile_service.ex"
+        )
+
+      assert File.exists?(full)
+    end
+
     test "returns correct module names", %{generated: generated} do
       modules = Enum.map(generated, &elem(&1, 1))
       assert "WhatsApp.Messages.MessagesService" in modules
       assert "WhatsApp.Media.MediaService" in modules
       assert "WhatsApp.Media.RootService" in modules
       assert "WhatsApp.Groups.GroupsService" in modules
+      assert "WhatsApp.Businessprofiles.WhatsappBusinessProfileService" in modules
     end
   end
 
@@ -90,8 +108,8 @@ defmodule WhatsApp.Generator.ServiceGeneratorTest do
         full = Path.join(output_dir, path)
         source = File.read!(full)
 
-        assert [{_module, _bytecode}] = Code.compile_string(source, full),
-               "Failed to compile #{path}"
+        assert {:ok, _ast} = Code.string_to_quoted(source, file: full),
+               "Failed to parse #{path}"
       end
     end
   end
@@ -281,11 +299,38 @@ defmodule WhatsApp.Generator.ServiceGeneratorTest do
                "@spec get_media_url(WhatsApp.Client.t(), String.t(), keyword())"
     end
 
-    test "all specs include return type", %{output_dir: output_dir} do
+    test "send_message spec returns typed resource", %{output_dir: output_dir} do
       source = read_service(output_dir, "messages/messages_service.ex")
+
+      assert source =~ "{:ok, WhatsApp.Resources.SendMessage.t()}"
+      assert source =~ "| {:ok, WhatsApp.Resources.SendMessage.t(), WhatsApp.Response.t()}"
+      assert source =~ "| {:error, WhatsApp.Error.t()}"
+    end
+
+    test "inline response schema resolves to typed resource", %{output_dir: output_dir} do
+      source = read_service(output_dir, "media/root_service.ex")
+
+      assert source =~ "{:ok, WhatsApp.Resources.GetMediaUrl.t()}"
+      assert source =~ "{:ok, WhatsApp.Resources.DeleteMedia.t()}"
+    end
+
+    test "raw response spec returns map for untyped list items", %{output_dir: output_dir} do
+      source = read_service(output_dir, "groups/groups_service.ex")
 
       assert source =~
                "{:ok, map()} | {:ok, map(), WhatsApp.Response.t()} | {:error, WhatsApp.Error.t()}"
+    end
+
+    test "list operation spec returns Page.t()", %{output_dir: output_dir} do
+      source =
+        read_service(
+          output_dir,
+          "businessprofiles/whatsapp_business_profile_service.ex"
+        )
+
+      assert source =~ "{:ok, WhatsApp.Page.t()}"
+      assert source =~ "| {:ok, WhatsApp.Page.t(), WhatsApp.Response.t()}"
+      assert source =~ "| {:error, WhatsApp.Error.t()}"
     end
   end
 
@@ -383,6 +428,117 @@ defmodule WhatsApp.Generator.ServiceGeneratorTest do
         assert String.trim(source) == String.trim(formatted),
                "#{path} is not properly formatted"
       end
+    end
+  end
+
+  # ── 14. Deserialization wrapping ─────────────────────────────────────────
+
+  describe "deserialization wrapping" do
+    test "send_message wraps result with Deserializer for known schema", %{
+      output_dir: output_dir
+    } do
+      source = read_service(output_dir, "messages/messages_service.ex")
+      assert source =~ "Deserializer.deserialize(data, WhatsApp.Resources.SendMessage)"
+      assert source =~ "case WhatsApp.Client.request("
+    end
+
+    test "send_message handles {:ok, data, resp} tuple for return_response", %{
+      output_dir: output_dir
+    } do
+      source = read_service(output_dir, "messages/messages_service.ex")
+      assert source =~ "{:ok, data, resp} ->"
+      assert source =~ "Deserializer.deserialize(data, WhatsApp.Resources.SendMessage), resp}"
+    end
+
+    test "inline response schemas also use Deserializer", %{output_dir: output_dir} do
+      source = read_service(output_dir, "media/root_service.ex")
+      assert source =~ "Deserializer.deserialize(data, WhatsApp.Resources.GetMediaUrl)"
+      assert source =~ "Deserializer.deserialize(data, WhatsApp.Resources.DeleteMedia)"
+    end
+
+    test "get_active_groups stays raw when data items have no ref", %{output_dir: output_dir} do
+      source = read_service(output_dir, "groups/groups_service.ex")
+      refute source =~ "Deserializer"
+      refute source =~ "Page.from_response"
+    end
+  end
+
+  # ── 15. Pagination wrapping ────────────────────────────────────────────
+
+  describe "pagination wrapping" do
+    test "list operation wraps result with Page.from_response", %{output_dir: output_dir} do
+      source =
+        read_service(
+          output_dir,
+          "businessprofiles/whatsapp_business_profile_service.ex"
+        )
+
+      assert source =~ "Page.from_response("
+      assert source =~ "Deserializer.deserialize(&1, WhatsApp.Resources.BusinessProfile)"
+    end
+
+    test "list operation uses case to handle return_response tuple", %{output_dir: output_dir} do
+      source =
+        read_service(
+          output_dir,
+          "businessprofiles/whatsapp_business_profile_service.ex"
+        )
+
+      list_fn = extract_function(source, "list_business_profiles")
+      assert list_fn =~ "case WhatsApp.Client.request("
+      assert list_fn =~ "{:ok, data} ->"
+      assert list_fn =~ "{:ok, data, resp} ->"
+    end
+  end
+
+  # ── 16. Stream companion functions ─────────────────────────────────────
+
+  describe "stream companion functions" do
+    test "list operation generates a stream companion", %{output_dir: output_dir} do
+      source =
+        read_service(
+          output_dir,
+          "businessprofiles/whatsapp_business_profile_service.ex"
+        )
+
+      assert source =~ "def stream_business_profiles("
+    end
+
+    test "stream function calls the list function", %{output_dir: output_dir} do
+      source =
+        read_service(
+          output_dir,
+          "businessprofiles/whatsapp_business_profile_service.ex"
+        )
+
+      stream_fn = extract_function(source, "stream_business_profiles")
+      assert stream_fn =~ "list_business_profiles(client, opts)"
+    end
+
+    test "stream function has correct spec", %{output_dir: output_dir} do
+      source =
+        read_service(
+          output_dir,
+          "businessprofiles/whatsapp_business_profile_service.ex"
+        )
+
+      assert source =~ "@spec stream_business_profiles(WhatsApp.Client.t(), keyword())"
+      assert source =~ "Enumerable.t() | {:error, WhatsApp.Error.t()}"
+    end
+
+    test "stream function has doc referencing list function", %{output_dir: output_dir} do
+      source =
+        read_service(
+          output_dir,
+          "businessprofiles/whatsapp_business_profile_service.ex"
+        )
+
+      assert source =~ "Stream version of `list_business_profiles/2`"
+    end
+
+    test "non-list operations do not generate stream companions", %{output_dir: output_dir} do
+      source = read_service(output_dir, "messages/messages_service.ex")
+      refute source =~ "def stream_"
     end
   end
 

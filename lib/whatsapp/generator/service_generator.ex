@@ -13,10 +13,12 @@ defmodule WhatsApp.Generator.ServiceGenerator do
   """
   @spec generate(map(), String.t()) :: [{String.t(), String.t()}]
   def generate(spec, output_dir) do
+    schemas = spec.schemas
+
     spec.domains
     |> Enum.flat_map(fn domain ->
       Enum.map(domain.resources, fn resource ->
-        generate_service(domain, resource, output_dir)
+        generate_service(domain, resource, schemas, output_dir)
       end)
     end)
   end
@@ -25,12 +27,12 @@ defmodule WhatsApp.Generator.ServiceGenerator do
   # File generation
   # ---------------------------------------------------------------------------
 
-  defp generate_service(domain, resource, output_dir) do
+  defp generate_service(domain, resource, schemas, output_dir) do
     module_name = Naming.service_module_name(domain.module_name, resource.module_name)
     relative_path = Naming.service_path(domain.module_name, resource.module_name)
     full_path = Path.join(output_dir, relative_path)
 
-    source = render_module(module_name, domain.tag_description, resource.operations)
+    source = render_module(module_name, domain.tag_description, resource.operations, schemas)
     formatted = Code.format_string!(source) |> IO.iodata_to_binary()
 
     full_path |> Path.dirname() |> File.mkdir_p!()
@@ -43,9 +45,9 @@ defmodule WhatsApp.Generator.ServiceGenerator do
   # Module rendering
   # ---------------------------------------------------------------------------
 
-  defp render_module(module_name, tag_description, operations) do
+  defp render_module(module_name, tag_description, operations, schemas) do
     moduledoc = render_moduledoc(tag_description)
-    functions = Enum.map(operations, &render_function/1) |> Enum.join("\n\n")
+    functions = Enum.map_join(operations, "\n\n", &render_function(&1, schemas))
 
     """
     defmodule #{module_name} do
@@ -74,20 +76,31 @@ defmodule WhatsApp.Generator.ServiceGenerator do
   # Function rendering
   # ---------------------------------------------------------------------------
 
-  defp render_function(operation) do
+  defp render_function(operation, schemas) do
     func_name = operation.name
     doc = render_doc(operation)
-    spec = render_spec(func_name, operation)
-    {signature, body} = render_function_body(func_name, operation)
+    response_info = resolve_response_info(operation, schemas)
+    spec = render_spec(func_name, operation, response_info)
+    {signature, body} = render_function_body(func_name, operation, response_info)
 
-    """
-    #{doc}
-    #{spec}
-    #{signature}
-    #{body}
+    main_fn =
+      """
+      #{doc}
+      #{spec}
+      #{signature}
+      #{body}
+      end
+      """
+      |> String.trim()
+
+    case response_info do
+      {:list, _module} ->
+        stream_fn = render_stream_function(func_name, operation, response_info)
+        main_fn <> "\n\n" <> stream_fn
+
+      _ ->
+        main_fn
     end
-    """
-    |> String.trim()
   end
 
   # ---------------------------------------------------------------------------
@@ -102,8 +115,7 @@ defmodule WhatsApp.Generator.ServiceGenerator do
         render_param_docs(operation),
         render_example_docs(operation)
       ]
-      |> Enum.reject(&is_nil/1)
-      |> Enum.reject(&(&1 == ""))
+      |> Enum.reject(&(is_nil(&1) or &1 == ""))
       |> Enum.join("\n\n")
 
     if parts == "" do
@@ -123,23 +135,21 @@ defmodule WhatsApp.Generator.ServiceGenerator do
   defp render_param_docs(operation) do
     params = operation.parameters
     query_params = Enum.filter(params, &(&1.in == :query))
-    path_arg_params = path_arg_params(operation)
-
-    doc_params = path_arg_params ++ query_params
+    doc_params = path_arg_params(operation) ++ query_params
 
     if doc_params == [] do
       nil
     else
-      lines =
-        Enum.map(doc_params, fn param ->
-          desc = Map.get(param, :description, "")
-          type = Map.get(param, :type, "")
-          required = if param.required, do: "**required**", else: "optional"
-          "  - `#{param.name}` (#{type}, #{required}) - #{desc}"
-        end)
-
+      lines = Enum.map(doc_params, &format_param_doc/1)
       "## Parameters\n\n" <> Enum.join(lines, "\n")
     end
+  end
+
+  defp format_param_doc(param) do
+    desc = Map.get(param, :description, "")
+    type = Map.get(param, :type, "")
+    required = if param.required, do: "**required**", else: "optional"
+    "  - `#{param.name}` (#{type}, #{required}) - #{desc}"
   end
 
   defp render_example_docs(operation) do
@@ -161,7 +171,7 @@ defmodule WhatsApp.Generator.ServiceGenerator do
   # @spec
   # ---------------------------------------------------------------------------
 
-  defp render_spec(func_name, operation) do
+  defp render_spec(func_name, operation, response_info) do
     arg_params = function_arg_path_params(operation)
     has_body = has_request_body?(operation)
 
@@ -182,17 +192,28 @@ defmodule WhatsApp.Generator.ServiceGenerator do
           ["WhatsApp.Client.t()", "keyword()"]
       end
 
-    return_type =
-      "{:ok, map()} | {:ok, map(), WhatsApp.Response.t()} | {:error, WhatsApp.Error.t()}"
+    return_type = spec_return_type(response_info)
 
     "@spec #{func_name}(#{Enum.join(arg_types, ", ")}) :: #{return_type}"
+  end
+
+  defp spec_return_type({:single, module_name}) do
+    "{:ok, #{module_name}.t()} | {:ok, #{module_name}.t(), WhatsApp.Response.t()} | {:error, WhatsApp.Error.t()}"
+  end
+
+  defp spec_return_type({:list, _module_name}) do
+    "{:ok, WhatsApp.Page.t()} | {:ok, WhatsApp.Page.t(), WhatsApp.Response.t()} | {:error, WhatsApp.Error.t()}"
+  end
+
+  defp spec_return_type(:raw) do
+    "{:ok, map()} | {:ok, map(), WhatsApp.Response.t()} | {:error, WhatsApp.Error.t()}"
   end
 
   # ---------------------------------------------------------------------------
   # Function body
   # ---------------------------------------------------------------------------
 
-  defp render_function_body(func_name, operation) do
+  defp render_function_body(func_name, operation, response_info) do
     arg_params = function_arg_path_params(operation)
     has_body = has_request_body?(operation)
     config_params = client_config_path_params(operation)
@@ -255,17 +276,40 @@ defmodule WhatsApp.Generator.ServiceGenerator do
     # Build request options
     request_opts = build_request_opts(operation, query_params)
 
-    # The request call
+    # The request call with deserialization wrapping
     method = operation.method
+    request_call = "WhatsApp.Client.request(client, :#{method}, #{path_string}#{request_opts})"
 
-    request_line =
-      "    WhatsApp.Client.request(client, :#{method}, #{path_string}#{request_opts})"
-
-    body_lines = body_lines ++ [request_line]
+    result_lines = render_result_wrapping(request_call, response_info)
+    body_lines = body_lines ++ result_lines
 
     body = Enum.join(body_lines, "\n")
 
     {signature, body}
+  end
+
+  defp render_result_wrapping(request_call, {:single, module_name}) do
+    [
+      "    case #{request_call} do",
+      "      {:ok, data} -> {:ok, WhatsApp.Deserializer.deserialize(data, #{module_name})}",
+      "      {:ok, data, resp} -> {:ok, WhatsApp.Deserializer.deserialize(data, #{module_name}), resp}",
+      "      error -> error",
+      "    end"
+    ]
+  end
+
+  defp render_result_wrapping(request_call, {:list, module_name}) do
+    [
+      "    case #{request_call} do",
+      "      {:ok, data} -> {:ok, WhatsApp.Page.from_response(data, &WhatsApp.Deserializer.deserialize(&1, #{module_name}))}",
+      "      {:ok, data, resp} -> {:ok, WhatsApp.Page.from_response(data, &WhatsApp.Deserializer.deserialize(&1, #{module_name})), resp}",
+      "      error -> error",
+      "    end"
+    ]
+  end
+
+  defp render_result_wrapping(request_call, :raw) do
+    ["    #{request_call}"]
   end
 
   # ---------------------------------------------------------------------------
@@ -364,5 +408,150 @@ defmodule WhatsApp.Generator.ServiceGenerator do
 
     operation.parameters
     |> Enum.filter(fn p -> p.in == :path && p.name in arg_param_names end)
+  end
+
+  # ---------------------------------------------------------------------------
+  # Response info resolution
+  # ---------------------------------------------------------------------------
+
+  # Determines how to handle the response: {:single, module}, {:list, module}, or :raw.
+  # - GET with no function-arg path params = list operation → {:list, item_module}
+  # - Other methods with known 200 schema → {:single, module}
+  # - Unknown/skipped schema → :raw
+  defp resolve_response_info(operation, schemas) do
+    schema_name = Map.get(operation.response_schemas || %{}, 200)
+    is_list_op = operation.method == :get and function_arg_path_params(operation) == []
+
+    cond do
+      is_list_op ->
+        resolve_list_response(schema_name, schemas)
+
+      schema_name != nil ->
+        resolve_single_response(schema_name, schemas)
+
+      true ->
+        :raw
+    end
+  end
+
+  defp resolve_single_response(schema_name, schemas) do
+    case resolve_resource_module(schema_name, schemas) do
+      nil -> :raw
+      module -> {:single, module}
+    end
+  end
+
+  defp resolve_list_response(schema_name, schemas) do
+    # For list endpoints, try to find the item type from the response schema's
+    # "data" property (which is typically {:array, {:ref, "ItemSchema"}}).
+    item_module = find_list_item_module(schema_name, schemas)
+
+    case item_module do
+      nil -> :raw
+      module -> {:list, module}
+    end
+  end
+
+  defp find_list_item_module(nil, _schemas), do: nil
+
+  defp find_list_item_module(schema_name, schemas) do
+    case Map.get(schemas, schema_name) do
+      nil ->
+        nil
+
+      schema ->
+        data_prop = Enum.find(Map.get(schema, :properties, []), &(&1.name == "data"))
+
+        case data_prop do
+          %{type: {:array, {:ref, ref_name}}} ->
+            resolve_resource_module(ref_name, schemas)
+
+          _ ->
+            nil
+        end
+    end
+  end
+
+  defp resolve_resource_module(schema_name, schemas) do
+    case Map.get(schemas, schema_name) do
+      nil ->
+        nil
+
+      schema ->
+        if resource_schema?(schema) do
+          Naming.resource_module_name_full(Naming.resource_module_name(schema_name))
+        else
+          nil
+        end
+    end
+  end
+
+  # A schema produces a resource struct if it's an object with properties
+  # or has allOf composition. Enums, consts, unions, and empty objects are skipped.
+  defp resource_schema?(%{type: :string, enum: _}), do: false
+  defp resource_schema?(%{type: :string, const: _}), do: false
+  defp resource_schema?(%{type: :union}), do: false
+
+  defp resource_schema?(%{type: :object} = schema) do
+    has_props = match?([_ | _], Map.get(schema, :properties, []))
+    has_all_of = is_list(Map.get(schema, :all_of))
+    has_props or has_all_of
+  end
+
+  defp resource_schema?(_), do: false
+
+  # ---------------------------------------------------------------------------
+  # Stream companion function for list operations
+  # ---------------------------------------------------------------------------
+
+  defp render_stream_function(list_func_name, operation, {:list, module_name}) do
+    stream_name = String.replace_prefix(to_string(list_func_name), "list_", "stream_")
+    stream_name = String.replace_prefix(stream_name, "get_", "stream_")
+
+    arg_params = function_arg_path_params(operation)
+    has_body = has_request_body?(operation)
+
+    args =
+      cond do
+        has_body && arg_params != [] ->
+          arg_names = Enum.map(arg_params, &Atom.to_string/1)
+          ["client"] ++ arg_names ++ ["opts \\\\ []"]
+
+        has_body ->
+          ["client", "opts \\\\ []"]
+
+        arg_params != [] ->
+          arg_names = Enum.map(arg_params, &Atom.to_string/1)
+          ["client"] ++ arg_names ++ ["opts \\\\ []"]
+
+        true ->
+          ["client", "opts \\\\ []"]
+      end
+
+    # Build the call to the list function with same args (minus opts default)
+    call_args = Enum.map_join(args, ", ", &String.replace(&1, " \\\\ []", ""))
+
+    """
+    @doc "Stream version of `#{list_func_name}/#{length(args)}` that auto-pages through all results."
+    @spec #{stream_name}(#{Enum.map_join(args, ", ", fn a -> arg_to_type(a) end)}) :: Enumerable.t() | {:error, WhatsApp.Error.t()}
+    def #{stream_name}(#{Enum.join(args, ", ")}) do
+      case #{list_func_name}(#{call_args}) do
+        {:ok, page} -> WhatsApp.Page.stream(page, client, deserialize_fn: &WhatsApp.Deserializer.deserialize(&1, #{module_name}))
+        error -> error
+      end
+    end
+    """
+    |> String.trim()
+  end
+
+  defp arg_to_type(arg) do
+    name = arg |> String.replace(" \\\\ []", "") |> String.trim()
+
+    cond do
+      name == "client" -> "WhatsApp.Client.t()"
+      name == "params" -> "map()"
+      name == "opts" -> "keyword()"
+      true -> "String.t()"
+    end
   end
 end

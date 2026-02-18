@@ -52,12 +52,10 @@ defmodule WhatsApp.Webhook do
     token = params["hub.verify_token"] || params["hub_verify_token"]
     challenge = params["hub.challenge"] || params["hub_challenge"]
 
-    cond do
-      mode == "subscribe" and token == verify_token and is_binary(challenge) ->
-        {:ok, challenge}
-
-      true ->
-        {:error, Error.webhook_verification_error("invalid or missing parameters")}
+    if mode == "subscribe" and token == verify_token and is_binary(challenge) do
+      {:ok, challenge}
+    else
+      {:error, Error.webhook_verification_error("invalid or missing parameters")}
     end
   end
 

@@ -27,3 +27,8 @@ whatsapp_sdk-*.tar
 
 # Downloaded OpenAPI spec files (synced via scripts/sync_openapi.sh, not committed)
 /priv/openapi/*.json
+
+/dev/
+
+claude.md
+agents.md

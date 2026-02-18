@@ -1,8 +1,8 @@
 defmodule WhatsApp.WebhookTest do
   use ExUnit.Case, async: true
 
-  alias WhatsApp.Webhook
   alias WhatsApp.Error
+  alias WhatsApp.Webhook
 
   @app_secret "test_app_secret_1234"
   @verify_token "my_verify_token"
