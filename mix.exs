@@ -8,6 +8,11 @@ defmodule WhatsApp.MixProject do
     [
       app: :whatsapp_sdk,
       version: @version,
+      name: "WhatsApp SDK",
+      description: "Elixir SDK for the WhatsApp Business Platform API",
+      source_url: @source_url,
+      homepage_url: "https://hexdocs.pm/whatsapp_sdk",
+      authors: ["Jeff Huen"],
       elixir: "~> 1.19",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
