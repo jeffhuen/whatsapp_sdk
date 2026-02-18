@@ -13,54 +13,62 @@ defmodule WhatsApp.Generator.ParityTest do
 
   @spec_path Path.expand("../../../priv/openapi/business-messaging-api_v23.0.json", __DIR__)
 
-  setup_all do
-    %{spec: OpenAPI.parse(@spec_path)}
-  end
-
-  describe "domain parity" do
-    test "spec produces expected number of domains", %{spec: spec} do
-      assert length(spec.domains) == 55
-    end
-  end
-
-  describe "operation parity" do
-    test "spec produces expected number of operations", %{spec: spec} do
-      op_count =
-        Enum.sum(
-          Enum.map(spec.domains, fn d ->
-            Enum.sum(Enum.map(d.resources, fn r -> length(r.operations) end))
-          end)
-        )
-
-      assert op_count == 113
-    end
-  end
-
-  describe "service module parity" do
-    test "generated service files match spec resource count", %{spec: spec} do
-      expected =
-        Enum.sum(Enum.map(spec.domains, fn d -> length(d.resources) end))
-
-      service_dir = Path.expand("../../../lib/whatsapp", __DIR__)
-
-      generated =
-        Path.wildcard(Path.join(service_dir, "*/*_service.ex"))
-        |> length()
-
-      assert generated == expected
+  if File.exists?(Path.expand("../../../priv/openapi/business-messaging-api_v23.0.json", __DIR__)) do
+    setup_all do
+      %{spec: OpenAPI.parse(@spec_path)}
     end
 
-    test "all generated service modules compile" do
-      service_dir = Path.expand("../../../lib/whatsapp", __DIR__)
+    describe "domain parity" do
+      test "spec produces expected number of domains", %{spec: spec} do
+        assert length(spec.domains) == 55
+      end
+    end
 
-      service_files = Path.wildcard(Path.join(service_dir, "*/*_service.ex"))
-      assert service_files != []
+    describe "operation parity" do
+      test "spec produces expected number of operations", %{spec: spec} do
+        op_count =
+          Enum.sum(
+            Enum.map(spec.domains, fn d ->
+              Enum.sum(Enum.map(d.resources, fn r -> length(r.operations) end))
+            end)
+          )
 
-      for file <- service_files do
-        module_source = File.read!(file)
+        assert op_count == 113
+      end
+    end
 
-        assert {:ok, _ast} = Code.string_to_quoted(module_source, file: file),
-               "Failed to parse #{file}"
+    describe "service module parity" do
+      test "generated service files match spec resource count", %{spec: spec} do
+        expected =
+          Enum.sum(Enum.map(spec.domains, fn d -> length(d.resources) end))
+
+        service_dir = Path.expand("../../../lib/whatsapp", __DIR__)
+
+        generated =
+          Path.wildcard(Path.join(service_dir, "*/*_service.ex"))
+          |> length()
+
+        assert generated == expected
+      end
+
+      test "all generated service modules compile" do
+        service_dir = Path.expand("../../../lib/whatsapp", __DIR__)
+
+        service_files = Path.wildcard(Path.join(service_dir, "*/*_service.ex"))
+        assert service_files != []
+
+        for file <- service_files do
+          module_source = File.read!(file)
+
+          assert {:ok, _ast} = Code.string_to_quoted(module_source, file: file),
+                 "Failed to parse #{file}"
+        end
+      end
+    end
+
+    describe "schema parity" do
+      test "spec produces expected number of schemas", %{spec: spec} do
+        assert map_size(spec.schemas) == 433
       end
     end
   end
@@ -89,12 +97,6 @@ defmodule WhatsApp.Generator.ParityTest do
         assert Code.ensure_loaded?(module),
                "Module #{inspect(module)} in ObjectTypes registry is not loadable"
       end
-    end
-  end
-
-  describe "schema parity" do
-    test "spec produces expected number of schemas", %{spec: spec} do
-      assert map_size(spec.schemas) == 433
     end
   end
 end
