@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        elixir: ["1.19", "1.20"]
+        elixir: ["1.19"]
         otp: ["27", "28"]
 
     steps:
@@ -52,7 +52,7 @@ jobs:
       - name: Setup Elixir
         uses: erlef/setup-beam@v1
         with:
-          elixir-version: "1.20"
+          elixir-version: "1.19"
           otp-version: "28"
 
       - name: Cache deps, _build, and PLTs
@@ -62,9 +62,9 @@ jobs:
             deps
             _build
             priv/plts
-          key: quality-${{ runner.os }}-1.20-28-${{ hashFiles('mix.lock') }}
+          key: quality-${{ runner.os }}-1.19-28-${{ hashFiles('mix.lock') }}
           restore-keys: |
-            quality-${{ runner.os }}-1.20-28-
+            quality-${{ runner.os }}-1.19-28-
 
       - name: Install dependencies
         run: mix deps.get
@@ -89,7 +89,7 @@ jobs:
       - name: Setup Elixir
         uses: erlef/setup-beam@v1
         with:
-          elixir-version: "1.20"
+          elixir-version: "1.19"
           otp-version: "28"
 
       - name: Install dependencies
@@ -131,7 +131,7 @@ jobs:
       - name: Setup Elixir
         uses: erlef/setup-beam@v1
         with:
-          elixir-version: "1.20"
+          elixir-version: "1.19"
           otp-version: "28"
 
       - name: Install dependencies
